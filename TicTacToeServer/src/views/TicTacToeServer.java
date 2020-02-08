@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tictactoeserver;
+package views;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
