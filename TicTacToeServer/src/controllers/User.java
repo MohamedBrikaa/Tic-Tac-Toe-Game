@@ -14,6 +14,9 @@ public class User {
     public String pic;
     public int score;
     
+    public User(){
+    
+    }
     public User(int userId,String userName,String email,String password,int score ,String pic,String state){
         this.userID=userId;
         this.userName=userName;
@@ -22,10 +25,6 @@ public class User {
         this.password=password;
         this.score=score;
         this.pic=pic;
-        
-        
-        
-        
     }
     
 }

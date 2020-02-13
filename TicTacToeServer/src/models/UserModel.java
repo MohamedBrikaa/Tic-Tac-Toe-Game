@@ -168,25 +168,25 @@ public class UserModel {
       return false;
    }
    
-   public static void main(String[] args) {
-   
-       Vector<User>v=new Vector<>();
-       v=returnAllPlayers();
-       for(int i=0;i<v.size();i++){
-           System.out.println(v.get(i).userName);
-           System.out.println(v.get(i).score);
-       }
-       boolean b=UserModel.updatePlayerState("nour","ONLINE");
-     //  System.out.println(b);
-       
-       boolean b2=UserModel.updatePlayerScore("nour", 3);
-        System.out.println(b2);
-        
-      for(int i=0;i<v.size();i++){
-           System.out.println(v.get(i).userName);
-           System.out.println(v.get(i).score);
-       }
-   }
+//   public static void main(String[] args) {
+//   
+//       Vector<User>v=new Vector<>();
+//       v=returnAllPlayers();
+//       for(int i=0;i<v.size();i++){
+//           System.out.println(v.get(i).userName);
+//           System.out.println(v.get(i).score);
+//       }
+//       boolean b=UserModel.updatePlayerState("nour","ONLINE");
+//     //  System.out.println(b);
+//       
+//       boolean b2=UserModel.updatePlayerScore("nour", 3);
+//        System.out.println(b2);
+//        
+//      for(int i=0;i<v.size();i++){
+//           System.out.println(v.get(i).userName);
+//           System.out.println(v.get(i).score);
+//       }
+//   }
    
  
    

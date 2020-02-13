@@ -7,21 +7,19 @@ import java.net.Socket;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import models.Player;
+import models.*;
 
 public class ClientHandler extends Thread {
 
     DataInputStream dis;
     PrintStream ps;
     Socket s;
-    Player usermodel;
     User user;
     static Vector<User> playersList = new Vector<>();
     static Vector<String> onlinePlayersUNames = new Vector<>();
     static Vector<ClientHandler> onlinePlayers = new Vector<>();
 
     public ClientHandler(Socket s) {
-        usermodel = new Player();
         user = new User();
         try {
             this.s = s;
@@ -69,7 +67,7 @@ public class ClientHandler extends Thread {
         try {
             userName = dis.readLine();
             password = dis.readLine();
-            if (usermodel.checkVaildation(userName, password)) {
+            if (UserModel.validatePlayer(userName, password)) {
                 
                 updateUserState(userName, "online");
                 user = getUserInfo(userName);
@@ -100,11 +98,11 @@ public class ClientHandler extends Thread {
         try {
             user.userName = dis.readLine();
             user.password = dis.readLine();
-            user.Email = dis.readLine();
+            user.email = dis.readLine();
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return usermodel.addNewUser(user);
+        return UserModel.addPlayer(user);
     }
 
     public void invitePlayer(String userName) {
@@ -126,21 +124,21 @@ public class ClientHandler extends Thread {
     }
 
     private User getUserInfo(String userName) {
-        return usermodel.getUserInfo(userName);
+        return UserModel.playerInfo(userName);
     }
 
     public void sendUserInfo(User user) {
         ps.println(user.userID);
         ps.println(user.userName);
-        ps.println(user.Email);
-        ps.println(user.State);
+        ps.println(user.email);
+        ps.println(user.state);
     }
 
     public void updateUserState(String useName, String State) {
-//    usermodel.updateState(State);
+//    UserModel.updateState(State);
     }
 
     public void refreshPlayersList() {
-//        playersList=usermodel.getPlayersdata();
+//        playersList=UserModel.getPlayersdata();
     }
 }

@@ -15,8 +15,8 @@ public class GameMatch extends Thread{
     User player2;
 
     public void initGame(String user1Name, String user2Name) {
-        player1 = Player.getUserInfo(user1Name);
-        player2 = Player.getUserInfo(user2Name);
+        player1 = UserModel.playerInfo(user1Name);
+        player2 = UserModel.playerInfo(user2Name);
     }
 
     public void stopGame() {
