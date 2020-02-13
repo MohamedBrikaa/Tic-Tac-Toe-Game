@@ -5,39 +5,23 @@
  */
 package views;
 
-import controllers.User;
-import controllers.ClientHandler;
-import models.UserModel;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.PrintStream;;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Collection;
+import controllers.*;
+import models.*;
+import java.io.*;
+import java.net.*;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.beans.value.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 /**
@@ -85,7 +69,6 @@ public class GameServerGUI extends Application {
                     }
                 }
             });
-
             switchedOn.set(false);
         }
 
@@ -95,6 +78,7 @@ public class GameServerGUI extends Application {
     }
     private final String []arrcolNames= {"userID","userName","password","email","score","state"};
     private final int []minWidth={100,25,20,200,50,20};
+    
     @Override
     public void start(Stage primaryStage) {
         final Label label = new Label("UserName of Players");
@@ -162,58 +146,48 @@ public class GameServerGUI extends Application {
                 System.out.println("resume thread server");
             }
         });
-
     }
   
-
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
+        System.out.println("run main");
         launch(args);
-  
     }
 
     private class GameServerXO extends Thread {
-
         ServerSocket serverSocket;
-        static final int SocketServerPORT = 5098;
-
+        static final int SocketServerPORT = 20080;
         @Override
         public void run() {
             try {
                 serverSocket = new ServerSocket(SocketServerPORT);
+                System.out.println("start accepting clients");
                 while (true) {
+                    System.out.println("waiting");
                     Socket s = serverSocket.accept();
-                    Thread acceptedThread = new Thread(new ClientHandler(s));
-                    acceptedThread.setDaemon(true); //terminate the thread when program end
-                    acceptedThread.start();
+                    System.out.println("new player connected");
+                    new ClientHandler(s);
+//                    Thread acceptedThread = new Thread(new ClientHandler(s));
+//                    acceptedThread.setDaemon(true); //terminate the thread when program end
+//                    acceptedThread.start();
                 }
             } catch (IOException ex) {
               
             }
         }
-
         public GameServerXO() {
-
+            
         }
-
         public void closeServer() {
             try {
                 serverSocket.close();
                 System.out.println("server is closed");
-                //closeAllInternalSockets();
+                ClientHandler.closeAllInternalSockets();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
 
         }
     }
-
-    
-
-
-   
 }
 
 

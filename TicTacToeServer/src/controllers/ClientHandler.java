@@ -25,6 +25,7 @@ public class ClientHandler extends Thread {
             this.s = s;
             dis = new DataInputStream(s.getInputStream());
             ps = new PrintStream(s.getOutputStream());
+            System.out.println("new socket for player connected and new handler initated");
             start();
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -36,10 +37,15 @@ public class ClientHandler extends Thread {
         while (true) {
             try {
                 String mssg;
+                System.out.println("waiting for new message");
+//                System.out.println();
                 mssg = dis.readLine();
+                System.out.println(mssg);
                 if (mssg.equals("signup")) {
+                    System.out.println("request signup");
                     ps.println(signUP());
                 } else if (mssg.equals("login")) {
+                    System.out.println("request login");
                     signIn();
                 } else if (mssg.equals("invite")) {
                     //send user invitation
@@ -55,6 +61,9 @@ public class ClientHandler extends Thread {
                     this.stop();
                     onlinePlayers.remove(this);
                     onlinePlayersUNames.remove(this.user.userName);
+                } else {
+                    System.out.println("unknown operation");
+                    System.out.println(mssg);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -68,14 +77,13 @@ public class ClientHandler extends Thread {
             userName = dis.readLine();
             password = dis.readLine();
             if (UserModel.validatePlayer(userName, password)) {
-                
-                updateUserState(userName, "online");
+
+                UserModel.updatePlayerState(userName, "ONLINE");
                 user = getUserInfo(userName);
 
                 onlinePlayers.add(this);
                 onlinePlayersUNames.add(userName);
-                
-                
+
                 ps.println("true");
                 sendUserInfo(user);
                 //send the player list to the player
@@ -118,7 +126,7 @@ public class ClientHandler extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-   
+
         //get socket for then invited player then get the replay if ok kill the 2 threads
         // and create anoter thread to handle the game between the 2 players
     }
@@ -134,11 +142,24 @@ public class ClientHandler extends Thread {
         ps.println(user.state);
     }
 
-    public void updateUserState(String useName, String State) {
-//    UserModel.updateState(State);
+    public void updateUserState(String userName, String State) {
+
     }
 
     public void refreshPlayersList() {
 //        playersList=UserModel.getPlayersdata();
+    }
+
+    public static void closeAllInternalSockets() {
+        for (ClientHandler player : onlinePlayers) {
+            try {
+                player.dis.close();
+                player.ps.close();
+                player.s.close();
+                player.stop();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
