@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package testgameserver;
+
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
+import java.io.PrintStream;;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,16 +35,13 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 /**
  *
  * @author Basant Mahrous
  */
-public class GameServerGUI extends Application {
-
+public class TestGameServer extends Application {
     private TableView table = new TableView();
     
     //Vector<Player> vAllPlayer=returnAllPlayers();  
@@ -196,7 +191,7 @@ public class GameServerGUI extends Application {
                     acceptedThread.start();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(gameserver.xo.GameServerXO.class.getName()).log(Level.SEVERE, null, ex);
+              
             }
         }
 
@@ -306,4 +301,12 @@ public class GameServerGUI extends Application {
         
     }
 
+
+    /**
+     * @param args the command line arguments
+     */
+   
 }
+
+
+    
