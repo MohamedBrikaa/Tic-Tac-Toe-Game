@@ -1,8 +1,10 @@
 package models;
 
 import controllers.User;
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
+import java.sql.Connection;
+import java.sql.Statement;
+//import com.mysql.jdbc.Connection;
+//import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

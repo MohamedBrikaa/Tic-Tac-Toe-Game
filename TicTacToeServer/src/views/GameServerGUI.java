@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package testgameserver;
+package views;
 
 
 import java.io.DataInputStream;
@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  *
  * @author Basant Mahrous
  */
-public class TestGameServer extends Application {
+public class GameServerGUI extends Application {
     private TableView table = new TableView();
     
     //Vector<Player> vAllPlayer=returnAllPlayers();  
