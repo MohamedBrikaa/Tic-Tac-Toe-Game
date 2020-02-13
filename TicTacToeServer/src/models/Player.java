@@ -11,17 +11,17 @@ import controllers.User;
  *
  * @author Mohamed-Suliman
  */
-public class UserModel {
+public class Player {
 
     public boolean checkVaildation(String userName, String password) {
-        return true;
+        return false;
     }
 
     public boolean addNewUser(User user) {
         return true;
     }
 
-    public User getUserInfo(String userName) {
+    public  static User getUserInfo(String userName) {
         return new User();
     }
 }

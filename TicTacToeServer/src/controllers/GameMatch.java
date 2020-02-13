@@ -5,23 +5,25 @@
  */
 package controllers;
 
+import models.*;
 /**
  *
  * @author Mohamed-Suliman
  */
-public class GameMatch {
+public class GameMatch extends Thread{
     User player1;
     User player2;
-    
-    public void initGame(){
-    
+
+    public void initGame(String user1Name, String user2Name) {
+        player1 = Player.getUserInfo(user1Name);
+        player2 = Player.getUserInfo(user2Name);
     }
-    
-    public void stopGame(){
-    
+
+    public void stopGame() {
+
     }
-    
-    public void resumeGame(){
-    
+
+    public void resumeGame() {
+
     }
 }
