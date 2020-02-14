@@ -149,7 +149,6 @@ public class GameServerGUI extends Application {
     }
   
     public static void main(String[] args) {
-        System.out.println("run main");
         launch(args);
     }
 
@@ -160,9 +159,7 @@ public class GameServerGUI extends Application {
         public void run() {
             try {
                 serverSocket = new ServerSocket(SocketServerPORT);
-                System.out.println("start accepting clients");
                 while (true) {
-                    System.out.println("waiting");
                     Socket s = serverSocket.accept();
                     System.out.println("new player connected");
                     new ClientHandler(s);
