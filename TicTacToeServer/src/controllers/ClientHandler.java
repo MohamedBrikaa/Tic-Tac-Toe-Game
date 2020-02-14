@@ -53,11 +53,11 @@ public class ClientHandler extends Thread {
                     invitePlayer(invitedPlayerUserName);
                 } else if (mssg.equals("playalone")) {
                     //cretat a thread to handle the game with the AI
-
+//                    new GameMatch(this.s,this.user.userName);
+//                    closePlayerConnection(this, "PLAYING");
                 } else if (mssg.equals("logout")) {
                     System.out.println("request logout");
-                    UserModel.updatePlayerState(this.user.userName, "OFFLINE");
-                    closePlayerConnection(this);
+                    closePlayerConnection(this, "OFFLINE");
                 } else {
                     System.out.println("unknown operation");
                     System.out.println(mssg);
@@ -73,17 +73,15 @@ public class ClientHandler extends Thread {
         try {
             userName = dis.readLine();
             password = dis.readLine();
+            //1 check user validation
             if (UserModel.validatePlayer(userName, password)) {
-
                 UserModel.updatePlayerState(userName, "ONLINE");
                 user = getUserInfo(userName);
-
                 onlinePlayers.add(this);
                 onlinePlayersUNames.add(userName);
-
-                ps.println("true");
+                ps.println("1");
                 sendUserInfo(user);
-                //send the player list to the player
+                //refresh players list and send the player list to the player
                 refreshPlayersList();
                 for (int i = 0; i < playersList.size(); i++) {
                     if (playersList.get(i).userID != user.userID) {
@@ -91,7 +89,7 @@ public class ClientHandler extends Thread {
                     }
                 }
             } else {
-                ps.println("false");
+                ps.println("0");
             }
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,6 +102,10 @@ public class ClientHandler extends Thread {
             user.userName = dis.readLine();
             user.password = dis.readLine();
             user.email = dis.readLine();
+            user.score = 0;
+            user.state = "OFFLINE";
+            refreshPlayersList();
+            //send updates to clients and server
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -118,18 +120,19 @@ public class ClientHandler extends Thread {
         try {
             if (onlinePlayers.get(invitedPlayerIndex).dis.readLine().equals("accept")) {
                 invitedPlayerSocket = onlinePlayers.get(invitedPlayerIndex).s;
-// new VsGameMatch(this.s,invitedPlayerSocket);
+//              new GameMatch(this.s,invitedPlayerSocket,this.user.userName,userName);
+                closePlayerConnection(this, "PLAYING");
+                closePlayerConnection(onlinePlayers.get(invitedPlayerIndex), "PLAYING");
             }
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     private User getUserInfo(String userName) {
         return UserModel.playerInfo(userName);
     }
-
+    
     public void sendUserInfo(User user) {
         ps.println(user.userID);
         ps.println(user.userName);
@@ -144,8 +147,7 @@ public class ClientHandler extends Thread {
     public static void closeAllInternalSockets() {
         for (ClientHandler player : onlinePlayers) {
             player.ps.println("serveroff");
-            UserModel.updatePlayerState(player.user.userName, "OFFLINE");
-            closePlayerConnection(player);
+            closePlayerConnection(player, "OFFLINE");
             try {
                 player.s.close();
             } catch (IOException ex) {
@@ -154,11 +156,12 @@ public class ClientHandler extends Thread {
         }
     }
 
-    private static void closePlayerConnection(ClientHandler handler) {
+    private static void closePlayerConnection(ClientHandler handler, String state) {
         try {
             handler.dis.close();
             handler.ps.close();
             handler.stop();
+            UserModel.updatePlayerState(handler.user.userName, state);
             onlinePlayers.remove(handler);
             onlinePlayersUNames.remove(handler.user.userName);
             playersList.remove(handler);
