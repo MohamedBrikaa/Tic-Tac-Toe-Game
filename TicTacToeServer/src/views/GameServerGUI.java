@@ -12,6 +12,7 @@ import java.net.*;
 import java.util.Vector;
 import javafx.application.Application;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,14 +25,38 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
 /**
  *
  * @author Basant Mahrous
  */
 public class GameServerGUI extends Application {
+
     private TableView table = new TableView();
-    Vector<User> vAllUsers=UserModel.returnAllPlayers();  
-    private final  ObservableList<User> data=FXCollections.observableArrayList(vAllUsers);
+    private Vector<User> vAllUsers = UserModel.returnAllPlayers();
+    //vAllUsers.size();
+    private Vector<Player> getALLUsersFromDB()
+    {
+        Vector<Player> allPlayer=new Vector<Player>();
+     for(int index=0;index<vAllUsers.size();index++)
+    {
+      allPlayer.add(new Player(vAllUsers.get(index)));
+    }
+     return allPlayer;
+    }
+       private int i=0;
+//     private final ObservableList<Player> data =
+//        FXCollections.observableArrayList(
+//       
+//                //new Player(vAllUsers.get(i));
+//           /* new Player("Isabella", "456", "isabella.johnson@example.com","5555","online"),
+//            new Player("Ethan", "678", "ethan.williams@example.com","5555","online"),
+//            new Player("Emma", "589", "emma.jones@example.com","5555","online"),
+//            new Player("Michael", "915", "michael.brown@example.com","5555","online")*/
+//        );
+      private final ObservableList<Player> data =
+        FXCollections.observableArrayList(getALLUsersFromDB());
+
     public class SwitchButtonC extends Label {
 
         private SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(true);
@@ -76,9 +101,7 @@ public class GameServerGUI extends Application {
             return switchedOn;
         }
     }
-    private final String []arrcolNames= {"userID","userName","password","email","score","state"};
-    private final int []minWidth={100,25,20,200,50,20};
-    
+   
     @Override
     public void start(Stage primaryStage) {
         final Label label = new Label("UserName of Players");
@@ -86,15 +109,15 @@ public class GameServerGUI extends Application {
         table.setEditable(true);
         TableColumn userIdCol = new TableColumn("User ID");
         userIdCol.setMinWidth(25);
-         userIdCol.setCellValueFactory(
+        userIdCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("userID"));
-         TableColumn userNameCol = new TableColumn("User Name");
+        TableColumn userNameCol = new TableColumn("User Name");
         userNameCol.setMinWidth(25);
-         userNameCol.setCellValueFactory(
+        userNameCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("userName"));
         TableColumn passCol = new TableColumn("Password");
         passCol.setMinWidth(20);
-         passCol.setCellValueFactory(
+        passCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("password"));
         TableColumn emailCol = new TableColumn("email");
         emailCol.setMinWidth(200);
@@ -105,11 +128,11 @@ public class GameServerGUI extends Application {
         scoreCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("score"));
         TableColumn statusCol = new TableColumn("Status");
-         scoreCol.setMinWidth(20);
-       statusCol.setCellValueFactory(
+        scoreCol.setMinWidth(20);
+        statusCol.setCellValueFactory(
                 new PropertyValueFactory<User, String>("state"));
         table.setItems(data);
-        table.getColumns().addAll(userIdCol,userNameCol, passCol, emailCol, scoreCol, statusCol);
+        table.getColumns().addAll(userIdCol, userNameCol, passCol, emailCol, scoreCol, statusCol);
         // SwitchButtonC switchBtn = new SwitchButtonC();
         ToggleButton onBtn = new ToggleButton("ON");
         ToggleButton offBtn = new ToggleButton("OFF");
@@ -147,15 +170,17 @@ public class GameServerGUI extends Application {
             }
         });
     }
-  
+
     public static void main(String[] args) {
         System.out.println("run main");
         launch(args);
     }
 
     private class GameServerXO extends Thread {
+
         ServerSocket serverSocket;
         static final int SocketServerPORT = 20080;
+
         @Override
         public void run() {
             try {
@@ -171,12 +196,14 @@ public class GameServerGUI extends Application {
 //                    acceptedThread.start();
                 }
             } catch (IOException ex) {
-              
+
             }
         }
+
         public GameServerXO() {
-            
+
         }
+
         public void closeServer() {
             try {
                 serverSocket.close();
@@ -188,7 +215,81 @@ public class GameServerGUI extends Application {
 
         }
     }
+
+    public static class Player {
+
+        private final SimpleStringProperty userID;
+        private final SimpleStringProperty userName;
+        private final SimpleStringProperty password;
+        private final SimpleStringProperty email;
+        private final SimpleStringProperty state;
+        private final SimpleStringProperty score;
+
+        private Player(User userobj) {
+            this.userID= new SimpleStringProperty( Integer.toString(userobj.userID) );
+            this.userName = new SimpleStringProperty(userobj.userName);
+            this.state = new SimpleStringProperty(userobj.state);
+            this.password = new SimpleStringProperty(userobj.password);
+            this.email = new SimpleStringProperty(userobj.email);
+            this.score = new SimpleStringProperty(Integer.toString(userobj.score));
+        }
+
+        private Player(String userID,String userName, String password, String email, String score, String state) {
+            this.userID = new SimpleStringProperty(userID);
+            this.userName = new SimpleStringProperty(userName);
+            this.state = new SimpleStringProperty(state);
+            this.password = new SimpleStringProperty(password);
+            this.email = new SimpleStringProperty(email);
+            this.score = new SimpleStringProperty(score);
+        }
+         public void setUserID(String userId) {
+            userID.set(userId);
+        }
+
+        public String getUserID() {
+            return userID.get();
+        }
+
+
+        public void setScore(String scores) {
+            score.set(scores);
+        }
+
+        public String getScore() {
+            return password.get();
+        }
+
+        public String getEmail() {
+            return email.get();
+        }
+
+        public void setEmail(String emails) {
+            email.set(emails);
+        }
+
+        public String getUserName() {
+            return userName.get();
+        }
+
+        public void setUserName(String uName) {
+            userName.set(uName);
+        }
+
+        public String getState() {
+            return state.get();
+        }
+
+        public void setState(String states) {
+            state.set(states);
+        }
+
+        public void setPassword(String passwords) {
+            password.set(passwords);
+        }
+
+        public String getPassword() {
+            return password.get();
+        }
+
+    }
 }
-
-
-    
