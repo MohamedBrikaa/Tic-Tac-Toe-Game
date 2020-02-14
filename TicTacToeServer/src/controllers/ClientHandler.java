@@ -55,12 +55,9 @@ public class ClientHandler extends Thread {
                     //cretat a thread to handle the game with the AI
 
                 } else if (mssg.equals("logout")) {
-                    this.dis.close();
-                    this.ps.close();
-                    this.s.close();
-                    this.stop();
-                    onlinePlayers.remove(this);
-                    onlinePlayersUNames.remove(this.user.userName);
+                    System.out.println("request logout");
+                    UserModel.updatePlayerState(this.user.userName, "OFFLINE");
+                    closePlayerConnection(this);
                 } else {
                     System.out.println("unknown operation");
                     System.out.println(mssg);
@@ -127,8 +124,6 @@ public class ClientHandler extends Thread {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //get socket for then invited player then get the replay if ok kill the 2 threads
-        // and create anoter thread to handle the game between the 2 players
     }
 
     private User getUserInfo(String userName) {
@@ -142,24 +137,33 @@ public class ClientHandler extends Thread {
         ps.println(user.state);
     }
 
-    public void updateUserState(String userName, String State) {
-
-    }
-
     public void refreshPlayersList() {
-//        playersList=UserModel.getPlayersdata();
+        playersList = UserModel.returnAllPlayers();
     }
 
     public static void closeAllInternalSockets() {
         for (ClientHandler player : onlinePlayers) {
+            player.ps.println("serveroff");
+            UserModel.updatePlayerState(player.user.userName, "OFFLINE");
+            closePlayerConnection(player);
             try {
-                player.dis.close();
-                player.ps.close();
                 player.s.close();
-                player.stop();
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    private static void closePlayerConnection(ClientHandler handler) {
+        try {
+            handler.dis.close();
+            handler.ps.close();
+            handler.stop();
+            onlinePlayers.remove(handler);
+            onlinePlayersUNames.remove(handler.user.userName);
+            playersList.remove(handler);
+        } catch (IOException ex) {
+            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
