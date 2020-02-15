@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Reflection?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="center" hgap="10" prefHeight="642.0" prefWidth="568.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <ImageView fitHeight="642.0" fitWidth="569.0">
+         <image>
+            <Image url="@bg.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="628.0" prefWidth="565.0" style="-fx-border-color: #591f0c; -fx-border-width: 7; -fx-border-radius: 5;">
+         <children>
+            <Button fx:id="inviteBtn" layoutX="413.0" layoutY="399.0" mnemonicParsing="false" onAction="#inviteFriend" prefHeight="47.0" prefWidth="123.0" style="-fx-background-color: #c44a22;" text="Invite a friend" textFill="#fffafa">
+               <font>
+                  <Font name="Al Afefah Font" size="17.0" />
+               </font>
+               <effect>
+                  <Lighting diffuseConstant="1.72" specularConstant="0.93" specularExponent="35.35" surfaceScale="2.9">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+            </Button>
+            <TableView layoutX="241.0" layoutY="228.0" prefHeight="148.0" prefWidth="309.0" style="-fx-border-width: 3; -fx-border-color: BLACK; -fx-border-radius: 4;">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Name" />
+                <TableColumn prefWidth="75.0" text="Status" />
+                  <TableColumn prefWidth="75.0" text="Score" />
+                  <TableColumn prefWidth="75.0" text="Level" />
+              </columns>
+            </TableView>
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="86.0" layoutY="22.0" prefHeight="63.0" prefWidth="422.0" text="How do you want to play?" textAlignment="CENTER" textFill="#fffdfd">
+               <font>
+                  <Font name="4 Star Face Font" size="53.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <effect>
+                  <DropShadow color="#d6470f" height="40.28" radius="17.0425" spread="0.36" width="29.89" />
+               </effect>
+            </Label>
+            <Label layoutX="349.0" layoutY="146.0" prefHeight="93.0" prefWidth="107.0" text="Players" textFill="WHITE">
+               <font>
+                  <Font name="4 Star Face Font" size="47.0" />
+               </font>
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" color="#eb4d0f" height="63.87" radius="19.235" spread="0.53" width="15.07" />
+               </effect>
+            </Label>
+            <ImageView fitHeight="93.0" fitWidth="309.0" layoutX="133.0" layoutY="500.0">
+               <image>
+                  <Image url="@stone-clip-tic-tac-3.gif" />
+               </image>
+               <effect>
+                  <Reflection topOpacity="0.2" />
+               </effect>
+            </ImageView>
+            <Button fx:id="compbtn" layoutX="252.0" layoutY="400.0" mnemonicParsing="false" onAction="#playWithComputer" prefHeight="47.0" prefWidth="143.0" style="-fx-background-color: #c44a22;" text="With computer" textFill="WHITE">
+               <font>
+                  <Font name="Al Afefah Font" size="18.0" />
+               </font>
+               <effect>
+                  <Lighting diffuseConstant="1.58" specularConstant="0.44" specularExponent="40.0" surfaceScale="2.9">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+            </Button>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </AnchorPane>
+   </children>
+</GridPane>
