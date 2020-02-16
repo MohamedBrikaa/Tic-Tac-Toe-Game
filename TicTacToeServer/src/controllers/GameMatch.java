@@ -35,7 +35,7 @@ public class GameMatch extends Thread{
             
            
             
-            //ba3dein han-assign kol wa7d fihom x aw o
+            
             dis[0]=new DataInputStream(s1.getInputStream());
             ps[0]=new PrintStream(s1.getOutputStream());
             ps[0].println(XO[0]);
@@ -53,16 +53,16 @@ public class GameMatch extends Thread{
     
     public void playerTurn(int playerNumber){
         try {
-            //ba3dein nbda2 l game ba2a kol wa7d 3aleh l dor ha2olo 3aleik l dor 
+           
             ps[playerNumber].println("It is your turn");
            
-            //ba3dein kol wa7d yb3at 7aga 
+            
             String index=dis[playerNumber].readLine();
             int x=Integer.parseInt(index);
             int i=x%3;
             int j=x/3;
             
-            //ha-update l grid w ab3atha lel etnein
+           
             grid[i][j]=XO[playerNumber];
             ps[0].println(index);
             ps[1].println(index);
