@@ -1,5 +1,5 @@
 
-package serverchatting;
+package controllers;
 
 import java.io.DataInputStream;
 import java.io.IOException;
