@@ -111,13 +111,10 @@ public class Client extends Thread {
                     msg = dis.readLine();
                     System.out.println(msg);
                 } else {
-                    System.out.println("ana gowa l else");
 
                     msg = dis.readLine();
                     System.out.println(msg);
                 }
-
-                System.out.println("ba3d l if wl else ");
 
                 if (Integer.parseInt(msg) >= 0 && Integer.parseInt(msg) < 9) {
                     row = Integer.parseInt(msg) % 3;
