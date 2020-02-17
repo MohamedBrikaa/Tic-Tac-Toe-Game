@@ -192,9 +192,7 @@ public class GameServerGUI extends Application {
                     Socket s = serverSocket.accept();
                     System.out.println("new player connected");
                     new ClientHandler(s);
-//                    Thread acceptedThread = new Thread(new ClientHandler(s));
-//                    acceptedThread.setDaemon(true); //terminate the thread when program end
-//                    acceptedThread.start();
+
                 }
             } catch (IOException ex) {
 
