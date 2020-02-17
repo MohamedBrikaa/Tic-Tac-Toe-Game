@@ -5,7 +5,6 @@
  */
 package controllers;
 
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -14,21 +13,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 
-
 /**
  *
  * @author Basant Mahrous
  */
 public class Client extends Thread {
 
-    private int position;
+    private int position = 3;
+    //private int position;
     private boolean myTurn;
     private String mark;
     private DataInputStream dis;
     private PrintStream ps;
-    private  String msg;
-    private static final String ipAddress="192.168.122.1";
-    private int socketPort=5005;
+    private String msg;
+    private static final String ipAddress = "127.0.0.1";
+    private int socketPort = 5005;
     private final static String win = "win";
     private final static String lose = "lose";
     int row, column;
@@ -37,34 +36,31 @@ public class Client extends Thread {
     private final static String waitForOpponentPlayerToPlay = "waiting for second player to play";
     private final static boolean youWin = false;
     private final static boolean opponentWin = false;
-    private String board[][] = {};
+    private String board[][] = new String[3][3];
     private Socket socket;
 
     public Client() {
-        try {
-            socket = new Socket(ipAddress,socketPort);
+        
+           try {
+            socket = new Socket(ipAddress, socketPort);
             dis = new DataInputStream(socket.getInputStream());
             ps = new PrintStream(socket.getOutputStream());
-            while (msg != "X" || msg != "O") {
-
-                try {
-                    msg = dis.readLine();
-                } catch (IOException ex) {
-                    Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            msg = dis.readLine(); //x/o
+            System.out.println(msg);
+            if (msg != "X" || msg != "O") {
+               mark = msg;
+              }
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        mark = msg;
+        start();
     }
 
     public void calculatePosition(int position) {
         row = Integer.parseInt(msg) % 3;
         column = Integer.parseInt(msg) / 3;
-        if(board[row][column]=="")
-        {
-           board[row][column] = mark;
+        if (board[row][column] == "") {
+            board[row][column] = mark;
         }
     }
 
@@ -106,14 +102,23 @@ public class Client extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+         while (true) {
             try {
-
-                msg = dis.readLine();
-                if (msg == turn) {
+                msg = dis.readLine(); //your turn or not 
+                System.out.println(msg);
+                if (msg.equals(turn)) {
                     ps.println(String.valueOf(position));
                     msg = dis.readLine();
+                    System.out.println(msg);
+                } else {
+                    System.out.println("ana gowa l else");
+
+                    msg = dis.readLine();
+                    System.out.println(msg);
                 }
+
+                System.out.println("ba3d l if wl else ");
+
                 if (Integer.parseInt(msg) >= 0 && Integer.parseInt(msg) < 9) {
                     row = Integer.parseInt(msg) % 3;
                     column = Integer.parseInt(msg) / 3;
@@ -125,9 +130,8 @@ public class Client extends Thread {
             }
         }
     }
-public void main (String []args)
 
-{
- new Client();
-}
+    public void main(String[] args) {
+        new Client();
+    }
 }
