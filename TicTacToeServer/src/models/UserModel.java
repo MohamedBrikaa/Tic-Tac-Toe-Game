@@ -169,6 +169,29 @@ public class UserModel {
        }
       return false;
    }
+   public static int playerId(String username) {
+       try {
+           Connection connection = connect();
+           Statement statement = (Statement) connection.createStatement();
+           ResultSet resultSet=statement.executeQuery("SELECT * FROM users");
+           
+           
+           while(resultSet.next()){
+               
+               if(resultSet.getString("User_Name").equals(username)){
+    
+                   int id=resultSet.getInt("User_ID");
+                   resultSet.close();
+                   connection.close();
+                   return id;
+               }
+           }
+          
+       } catch (SQLException ex) {
+           Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
+       }
+        return -1;
+   }
    
 //   public static void main(String[] args) {
 //   
