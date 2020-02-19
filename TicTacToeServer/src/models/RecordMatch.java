@@ -26,8 +26,7 @@ public class RecordMatch {
    }
 
      
-     //3aiza function 2adiha 2 players trga3li lw fii match benhom lw laa hatb2a b null
-     //w 2a7ot kaman f kol 7aga match turn 
+    
      
     
     public static boolean addMatch(int player1Id,int player2Id,String[][] grid,int playerTurn){
@@ -69,12 +68,15 @@ public class RecordMatch {
                        for(int j=0;j<3;j++){
                            String colName="Cell";
                            int x= i+(3*j);
+                           x++;
                            colName+=String.valueOf(x);
                            grid[i][j]=resultSet.getString(colName);
                        }
                    }
+                   
+                   Match m= new Match(grid,resultSet.getInt("User1_ID"),resultSet.getInt("User2_ID"),resultSet.getInt("Match_ID"),resultSet.getInt("player_turn"));
                    resultSet.close();
-                   return new Match(grid,resultSet.getInt("User1_ID"),resultSet.getInt("User2_ID"),resultSet.getInt("Match_ID"),resultSet.getInt("player_turn"));
+                   return m;
                }
            }
            
@@ -83,8 +85,7 @@ public class RecordMatch {
        }
        
            return null;
-    }
-    
+    }    
   
     public static void main(String[] args) throws SQLException {
         
