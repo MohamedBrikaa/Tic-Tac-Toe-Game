@@ -86,6 +86,25 @@ public class RecordMatch {
        
            return null;
     }    
+    
+     
+    public static boolean removeMatch(int matchId){
+       try {
+           Connection connection = connect();
+           PreparedStatement preparedStatement=connection.prepareStatement("DELETE FROM recorded_match where Match_ID =?");
+           preparedStatement.setInt(1, matchId);
+            
+           int res=preparedStatement.executeUpdate();
+           
+           connection.close();
+           preparedStatement.close();
+           return res>0;
+       } catch (SQLException ex) {
+           Logger.getLogger(RecordMatch.class.getName()).log(Level.SEVERE, null, ex);
+       }
+           return false;
+        
+    }
   
     public static void main(String[] args) throws SQLException {
         
