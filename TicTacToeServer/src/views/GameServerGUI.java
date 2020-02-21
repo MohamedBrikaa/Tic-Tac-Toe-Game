@@ -12,6 +12,7 @@ import java.net.*;
 import java.util.Vector;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.*;
@@ -33,76 +34,24 @@ import javafx.stage.Stage;
  */
 public class GameServerGUI extends Application {
 
-    private TableView table = new TableView();
-    private Vector<User> vAllUsers = UserModel.returnAllPlayers();
-    //vAllUsers.size();
-    private Vector<Player> getALLUsersFromDB()
-    {
-        Vector<Player> allPlayer=new Vector<Player>();
-     for(int index=0;index<vAllUsers.size();index++)
-    {
-      allPlayer.add(new Player(vAllUsers.get(index)));
+    public static TableView table = new TableView();
+    private static Vector<User> vAllUsers;
+    private static ObservableList<Player> data = FXCollections.observableArrayList(getALLUsersFromDB());
+
+    public static void updatePlayersTable() {
+        data = FXCollections.observableArrayList(getALLUsersFromDB());
+        table.setItems(data);
     }
-     return allPlayer;
-    }
-       private int i=0;
-//     private final ObservableList<Player> data =
-//        FXCollections.observableArrayList(
-//       
-//                //new Player(vAllUsers.get(i));
-//           /* new Player("Isabella", "456", "isabella.johnson@example.com","5555","online"),
-//            new Player("Ethan", "678", "ethan.williams@example.com","5555","online"),
-//            new Player("Emma", "589", "emma.jones@example.com","5555","online"),
-//            new Player("Michael", "915", "michael.brown@example.com","5555","online")*/
-//        );
-      private final ObservableList<Player> data =
-        FXCollections.observableArrayList(getALLUsersFromDB());
 
-    public class SwitchButtonC extends Label {
-
-        private SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(true);
-
-        public SwitchButtonC() {
-            Button switchBtn = new Button();
-            switchBtn.setStyle(" -fx-border-radius: 15;");
-            switchBtn.setStyle("-fx-background-color: blue;");
-            switchBtn.setStyle("-fx-background-radius: 16.4, 15;");
-
-            switchBtn.setPrefWidth(40);
-            switchBtn.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent t) {
-                    switchedOn.set(!switchedOn.get());
-                }
-            });
-
-            setGraphic(switchBtn);
-
-            switchedOn.addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> ov,
-                        Boolean t, Boolean t1) {
-                    if (t1) {
-                        setText("ON");
-                        setStyle("-fx-background-color: red;-fx-text-fill:white;");
-                        setContentDisplay(ContentDisplay.RIGHT);
-
-                    } else {
-                        setText("OFF");
-                        setStyle("-fx-background-color: gray;-fx-text-fill:black;");
-                        setContentDisplay(ContentDisplay.LEFT);
-
-                    }
-                }
-            });
-            switchedOn.set(false);
+    public static Vector<Player> getALLUsersFromDB() {
+        vAllUsers = UserModel.returnAllPlayers();
+        Vector<Player> allPlayer = new Vector<Player>();
+        for (int index = 0; index < vAllUsers.size(); index++) {
+            allPlayer.add(new Player(vAllUsers.get(index)));
         }
-
-        public SimpleBooleanProperty switchOnProperty() {
-            return switchedOn;
-        }
+        return allPlayer;
     }
-   
+
     @Override
     public void start(Stage primaryStage) {
         final Label label = new Label("UserName of Players");
@@ -173,7 +122,6 @@ public class GameServerGUI extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("run main");
         launch(args);
     }
 
@@ -192,9 +140,6 @@ public class GameServerGUI extends Application {
                     Socket s = serverSocket.accept();
                     System.out.println("new player connected");
                     new ClientHandler(s);
-//                    Thread acceptedThread = new Thread(new ClientHandler(s));
-//                    acceptedThread.setDaemon(true); //terminate the thread when program end
-//                    acceptedThread.start();
                 }
             } catch (IOException ex) {
 
@@ -227,7 +172,7 @@ public class GameServerGUI extends Application {
         private final SimpleStringProperty score;
 
         private Player(User userobj) {
-            this.userID= new SimpleStringProperty( Integer.toString(userobj.userID) );
+            this.userID = new SimpleStringProperty(Integer.toString(userobj.userID));
             this.userName = new SimpleStringProperty(userobj.userName);
             this.state = new SimpleStringProperty(userobj.state);
             this.password = new SimpleStringProperty(userobj.password);
@@ -235,7 +180,7 @@ public class GameServerGUI extends Application {
             this.score = new SimpleStringProperty(Integer.toString(userobj.score));
         }
 
-        private Player(String userID,String userName, String password, String email, String score, String state) {
+        private Player(String userID, String userName, String password, String email, String score, String state) {
             this.userID = new SimpleStringProperty(userID);
             this.userName = new SimpleStringProperty(userName);
             this.state = new SimpleStringProperty(state);
@@ -243,14 +188,14 @@ public class GameServerGUI extends Application {
             this.email = new SimpleStringProperty(email);
             this.score = new SimpleStringProperty(score);
         }
-         public void setUserID(String userId) {
+
+        public void setUserID(String userId) {
             userID.set(userId);
         }
 
         public String getUserID() {
             return userID.get();
         }
-
 
         public void setScore(String scores) {
             score.set(scores);
@@ -292,5 +237,50 @@ public class GameServerGUI extends Application {
             return password.get();
         }
 
+    }
+
+    public class SwitchButtonC extends Label {
+
+        private SimpleBooleanProperty switchedOn = new SimpleBooleanProperty(true);
+
+        public SwitchButtonC() {
+            Button switchBtn = new Button();
+            switchBtn.setStyle(" -fx-border-radius: 15;");
+            switchBtn.setStyle("-fx-background-color: blue;");
+            switchBtn.setStyle("-fx-background-radius: 16.4, 15;");
+
+            switchBtn.setPrefWidth(40);
+            switchBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent t) {
+                    switchedOn.set(!switchedOn.get());
+                }
+            });
+
+            setGraphic(switchBtn);
+
+            switchedOn.addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> ov,
+                        Boolean t, Boolean t1) {
+                    if (t1) {
+                        setText("ON");
+                        setStyle("-fx-background-color: red;-fx-text-fill:white;");
+                        setContentDisplay(ContentDisplay.RIGHT);
+
+                    } else {
+                        setText("OFF");
+                        setStyle("-fx-background-color: gray;-fx-text-fill:black;");
+                        setContentDisplay(ContentDisplay.LEFT);
+
+                    }
+                }
+            });
+            switchedOn.set(false);
+        }
+
+        public SimpleBooleanProperty switchOnProperty() {
+            return switchedOn;
+        }
     }
 }

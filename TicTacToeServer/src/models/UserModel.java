@@ -156,7 +156,8 @@ public class UserModel {
        try {
            Connection connection = connect();
            PreparedStatement preparedStatement=connection.prepareStatement("UPDATE users SET State =? where User_name=? ");
-           
+           System.out.println(username);
+           System.out.println(state);
            preparedStatement.setString(1, state);
            preparedStatement.setString(2, username);
            int res=preparedStatement.executeUpdate();  

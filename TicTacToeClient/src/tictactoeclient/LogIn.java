@@ -14,6 +14,7 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -41,60 +42,69 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import models.User;
 
 /**
  *
  * @author Isaac Wahba
  */
-public class LogIn extends Application
-{
+public class LogIn extends Application {
 
     private ServerSocket server = null;
     Socket s;
-
     String serverMessage = "";
     PrintStream toServer = null;
     DataInputStream fromServer;
+    String mssg;
+    static Vector<User> playersList = new Vector<>();
+    User currentUser;
+    boolean loggedIn = false;
+//    boolean isServerOn = false;
 
-    public void init()
-    {
+    public void init() {
         try {
             this.s = new Socket("127.0.0.1", 20080);
+//            isServerOn = true;
             this.toServer = new PrintStream(s.getOutputStream());
             this.fromServer = new DataInputStream(s.getInputStream());
-//            toServer.print("login");
-//            toServer.print("unam");
-//            toServer.print("pass");
-//            String stat=fromServer.readLine();
-            //           System.out.println(stat);
         } catch (IOException ex) {
             Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        new Thread(new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                while (true) {
-                    try {
-                        System.out.println("waiting for connection");
-                        String value;
-                        value = fromServer.readLine();
-                        System.out.println("recived");
-                        System.out.println(value);
-                    } catch (IOException ex) {
-                        Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                while (isServerOn) {
+//                    try {
+//                        System.out.println("waiting for message");
+//                        mssg = fromServer.readLine();
+//                        System.out.println(mssg);
+//
+//                        if (mssg.equals("serveroff")) {
+//
+//                            isServerOn = false;
+//                            closeConnectionToServer();
+//
+//                        } else if (mssg.equals("invitation")) {
+//
+//                            String invitingPlayerUserName = fromServer.readLine();
+//                            System.out.println("invitation from " + invitingPlayerUserName + "player");
+//                            toServer.println("accept");
+//
+//                        } else if (mssg.equals("updateStatus")) {
+//
+//                        }
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     @Override
-    public void start(Stage primaryStage)
-    {
+    public void start(Stage primaryStage) {
 
         primaryStage.setTitle("Login Here!");
         GridPane grid = new GridPane();
@@ -136,64 +146,55 @@ public class LogIn extends Application
         Scene scene = new Scene(grid, 500, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
-        btn.setOnAction(new EventHandler<ActionEvent>()
-        {
+        //login btn action
+        btn.setOnAction(new EventHandler<ActionEvent>() {
             @FXML
 
             @Override
-            public void handle(ActionEvent e)
-            {
-
-                System.out.println("Login");
+            public void handle(ActionEvent e) {
+                System.out.println("login");
                 String User = userTextField.getText();
                 String Pass = pwBox.getText();
+
                 System.out.println(userTextField.getText());
                 System.out.println(pwBox.getText());
-                LoadHomePage(primaryStage);
                 toServer.println("login");
                 toServer.println(User);
                 toServer.println(Pass);
-                primaryStage.show();
-                actiontarget.setFill(Color.FIREBRICK);
-                actiontarget.setText("Sign in button pressed");
+
+                try {
+                    mssg = fromServer.readLine();
+                    if (mssg.equals("loginDone")) {
+
+                        handleLoginOpeartionWithServer();
+                        LoadHomePage(primaryStage);
+                        primaryStage.show();
+                        actiontarget.setFill(Color.FIREBRICK);
+                        actiontarget.setText("Sign in button pressed");
+                        ClientListner listner = new ClientListner();
+                        listner.start();
+//                        listner.s
+                    } else if (mssg.equals("loginFailed")) {
+
+                        System.out.println("login Failed Please try again");
+
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
         });
 
-//        new Thread(() -> {
-//            try {
-//                while (true) {
-////                    System.out.println("Client accepted: " + s);
-//                  // serverMessage = fromServer.readUTF();
-//                    String value = fromServer.readLine();
-//                    System.out.println(value );
-//                    System.out.println("message received");
-//
-////                   Platform.runLater(() -> {
-////                        userTextField.requestFocus();
-////                        // pwBox.requestFocus();
-////                        //userTextField.appendText(serverMessage);
-////
-////                    });
-//                }
-//            } catch (IOException e) {
-//                //.appendText(e.toString() + "\n");
-//            }
-//        }).start();
     }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         launch(args);
     }
 
-    public void LoadHomePage(Stage primaryStage)
-    {
+    public void LoadHomePage(Stage primaryStage) {
 
         GridPane Grid = new GridPane();
-
         Grid.setAlignment(Pos.CENTER);
         Grid.setHgap(10);
         Grid.setVgap(10);
@@ -208,4 +209,93 @@ public class LogIn extends Application
 
     }
 
+    private User receiveUserInfo() {
+        User user = new User();
+        try {
+            user.userID = Integer.valueOf(fromServer.readLine());
+            user.userName = fromServer.readLine();
+            user.email = fromServer.readLine();
+            user.state = fromServer.readLine();
+            user.score = Integer.valueOf(fromServer.readLine());
+        } catch (IOException ex) {
+            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return user;
+    }
+
+    private void printUserData(User u) {
+        System.out.println(u.userID);
+        System.out.println(u.userName);
+        System.out.println(u.email);
+        System.out.println(u.state);
+        System.out.println(u.score);
+    }
+
+    private void handleLoginOpeartionWithServer() {
+        try {
+            loggedIn = true;
+            currentUser = receiveUserInfo();
+            printUserData(currentUser);
+            int playersNum = Integer.valueOf(fromServer.readLine());
+            for (int i = 0; i < playersNum; i++) {
+                playersList.add(receiveUserInfo());
+                printUserData(playersList.get(i));
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void stop() {
+        toServer.println("logout");
+        closeConnectionToServer();
+    }
+
+    private void closeConnectionToServer() {
+        try {
+            fromServer.close();
+            toServer.close();
+            s.close();
+            super.stop();
+        } catch (IOException ex) {
+            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    class ClientListner extends Thread {
+
+        boolean isServerOn;
+
+        public ClientListner() {
+            System.out.println("thread created");
+            isServerOn = true;
+        }
+
+        @Override
+        public void run() {
+            while (isServerOn) {
+                try {
+                    System.out.println("thread waiting for a message");
+                    mssg = fromServer.readLine();
+                    System.out.println(mssg);
+                    if (mssg.equals("serveroff")) {
+                        isServerOn = false;
+                        closeConnectionToServer();
+                    } else if (mssg.equals("invitation")) {
+                        String invitingPlayerUserName = fromServer.readLine();
+                        System.out.println("invitation from " + invitingPlayerUserName + "player");
+                        toServer.println("accept");
+                    } else if (mssg.equals("updateStatus")) {
+                    } else {
+                        System.out.println("unknown");
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
 }
