@@ -57,8 +57,8 @@ public class Client extends Thread {
     }
 
     public void calculatePosition(int position) {
-        row = Integer.parseInt(msg) % 3;
-        column = Integer.parseInt(msg) / 3;
+        row = Integer.parseInt(position) % 3;
+        column = Integer.parseInt(position) / 3;
         if (board[row][column] == "") {
             board[row][column] = mark;
         }
