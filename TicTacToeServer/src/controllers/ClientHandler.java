@@ -70,17 +70,17 @@ public class ClientHandler extends Thread {
                 } else if (mssg.equals("logout")) {
 
                     System.out.println("request logout");
+//                    sendUpdatetoAllClients("logout");
                     closePlayerConnection(this, "OFFLINE");
 
                 } else if (isNumeric(mssg)) {
                     //send movement
                     System.out.println("Play Movement");
                     gameMatches.get(gameIndex).sendNewMove(mssg);
-                } else if(mssg.equals("accept")||mssg.equals("refused")){
+                } else if (mssg.equals("accept") || mssg.equals("refused")) {
                     //client accept or refuse invitation from another thread
                     invitationStatus.set(invitationIndex, mssg);
-                }
-                else {
+                } else {
                     System.out.println("unknown operation");
                     System.out.println(mssg);
                 }
@@ -120,6 +120,7 @@ public class ClientHandler extends Thread {
                 refreshPlayersList();
                 sendPlayersList();
                 GameServerGUI.updatePlayersTable();
+//                sendUpdatetoAllClients("login");
             } else {
                 ps.println("loginFailed");
             }
@@ -127,6 +128,18 @@ public class ClientHandler extends Thread {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void sendUpdatetoAllClients(String updateState) {
+        for (ClientHandler player : onlinePlayers) {
+            if (player.user.userID != this.user.userID) {
+                player.ps.println("updateStatus");
+                player.ps.println(this.user.userName);
+                player.ps.println(onlinePlayers.size() - 1);
+                player.ps.println(updateState);
+                sendPlayersList();
+            }
+        }
     }
 
     public void signUP() {
@@ -138,8 +151,6 @@ public class ClientHandler extends Thread {
             user.state = "OFFLINE";
             refreshPlayersList();
             //refresh data in server GUI
-            GameServerGUI.updatePlayersTable();
-
             //send updates to clients and server
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,6 +158,7 @@ public class ClientHandler extends Thread {
         if (!(user.userName.isEmpty() && user.email.isEmpty() && user.password.isEmpty())) {
             if (UserModel.addPlayer(user)) {
                 ps.println("signupDone");
+                GameServerGUI.updatePlayersTable();
             } else {
                 ps.println("signupFailed");
             }
@@ -166,14 +178,13 @@ public class ClientHandler extends Thread {
         } catch (InterruptedException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         invitationStatus.add(new String("waiting"));
         this.invitationIndex = invitationStatus.size() - 1;
         invitedClient.invitationIndex = invitationStatus.size() - 1;
         while (invitationStatus.get(invitationIndex).equals("waiting"));
         String invitatonReply = invitationStatus.get(invitationIndex);
 //        String invitatonReply = "accept";
-//          String invitatonReply = invitedClient.dis.readLine();
 
         if (invitatonReply.equals("accept")) {
             //recive accept
@@ -228,16 +239,16 @@ public class ClientHandler extends Thread {
     private static void closePlayerConnection(ClientHandler handler, String state) {
         try {
             System.out.println(handler.user.userName);
-            System.out.println(state);
             UserModel.updatePlayerState(handler.user.userName, state);
             handler.dis.close();
             handler.ps.close();
+            GameServerGUI.updatePlayersTable();
             handler.stop();
 
             onlinePlayers.remove(handler);
             onlinePlayersUNames.remove(handler.user.userName);
             playersList.remove(handler);
-            GameServerGUI.updatePlayersTable();
+
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
