@@ -36,6 +36,8 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
 
 public class TicTacToeClient extends Application {
 
@@ -156,7 +158,7 @@ public class TicTacToeClient extends Application {
         final Text signUpActiontarget = new Text();
         grid.add(signUpActiontarget, 1, 11);
 
-        Signupbtn.setOnAction(new EventHandler<ActionEvent>() {
+         Signupbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
 
@@ -166,30 +168,68 @@ public class TicTacToeClient extends Application {
                 System.out.println(name);
                 System.out.println(Pass);
                 System.out.println(Email);
-                toServer.println("signup");
-                toServer.println(name);
-                toServer.println(Pass);
-                toServer.println(Email);
-
-                try {
-                    mssg = fromServer.readLine();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                String error = "";
+                String regexName = "\\p{Upper}(\\p{Lower}+\\s?)";
+                String patternName = "(" + regexName + "){2,3}";
+                System.out.println("The name is: " + name);
+                System.out.println("Is the above name valid? " + name.matches(patternName));
+                boolean nameResult = name.matches(patternName);
+                String regexEmail = "^(.+)@(.+)$";
+                Pattern patternEmail = Pattern.compile(regexEmail);
+                System.out.println("Is the above Email valid? " + Email.matches(String.valueOf(patternEmail)));
+                boolean EmailResult = Email.matches(String.valueOf(patternEmail));
+                String regexPass = "((?=.*\\d)(?=.*[@#$%!]).{5,40})";
+                Pattern patternPass = Pattern.compile(regexPass);
+                System.out.println("Is the above Pass valid? " + Pass.matches(String.valueOf(patternPass)));
+                boolean passResult = Pass.matches(String.valueOf(patternPass));
+                if (name.equals("") || Pass.equals("") || Email.equals("")) {
+                    error = "Please Fill All Inputs\n";
+                    signUpActiontarget.setText(error);
                 }
-                if (mssg.equals("signupDone")) {
+                if (nameResult == false) {
 
-                    System.out.println("Sign up Done");
-                    signUpActiontarget.setFill(Color.FIREBRICK);
-                    signUpActiontarget.setText("Signed up successfully, Please Login");
+                    error += "Please Enter Valid Name\n";
+                    signUpActiontarget.setText(error);
+                }
+                if (EmailResult == false) {
+                    error += "Please Enter Valid Email\n";
+                    signUpActiontarget.setText(error);
+                }
+                if (passResult == false) {
+                    error += "Please Enter Valid Password\n";
+                    signUpActiontarget.setText(error);
+                } else {
+                    toServer.println("signup");
+                    toServer.println(name);
+                    toServer.println(Pass);
+                    toServer.println(Email);
 
-                } else if (mssg.equals("signupFailed")) {
+                    try {
+                        mssg = fromServer.readLine();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {if (mssg.equals("signupDone")) {
 
-                    System.out.println("Sign up Failed Please try again");
-                    signUpActiontarget.setFill(Color.FIREBRICK);
-                    signUpActiontarget.setText("Sign up Failed Please try again");
+                            System.out.println("Sign up Done");
+                            signUpActiontarget.setFill(Color.FIREBRICK);
+                            signUpActiontarget.setText("Signed up successfully, Please Login");
+
+                        } else if (mssg.equals("signupFailed")) {
+
+                            System.out.println("Sign up Failed Please try again");
+                            signUpActiontarget.setFill(Color.FIREBRICK);
+                            signUpActiontarget.setText("Sign up Failed Please try again");
+
+                        }
+
+
+                        }
+                    });
 
                 }
-
             }
         });
 
@@ -225,6 +265,7 @@ public class TicTacToeClient extends Application {
             loggedIn = true;
             currentUser = receiveUserInfo();
             SendDataToHomePage(currentUser);
+            SendDataToOneVsOnePage(currentUser);
             int playersNum = Integer.valueOf(fromServer.readLine());
             for (int i = 0; i < playersNum; i++) {
                 playersList.add(receiveUserInfo());
@@ -257,6 +298,9 @@ public class TicTacToeClient extends Application {
     private void SendDataToHomePage(User newUser) {
         new Controller().recieveData(newUser);
     }
+        private void SendDataToOneVsOnePage(User newUser) {
+        new OneVsOne().recieveData(newUser);
+    }
 
     private void SendAllInfoToGamePage(Socket socket, PrintWriter toServer, BufferedReader fromServer, Vector<User> playerList) {
         new Controller().recieveSocket(socket, toServer, fromServer, playerList);
@@ -264,6 +308,19 @@ public class TicTacToeClient extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void recievePlayersData()
+    {try {
+        int playersNum = Integer.valueOf(fromServer.readLine());
+        for (int i = 0; i < playersNum; i++) {
+            playersList.add(receiveUserInfo());
+            printUserData(playersList.get(i));
+        }
+        SendAllInfoToGamePage(s, toServer, fromServer, playersList);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 
     class ClientListner extends Thread {
@@ -331,25 +388,46 @@ public class TicTacToeClient extends Application {
                         });
 
                     } else if (mssg.equals("updateStatus")) {
-                        System.out.println(mssg);
-                        String userName = fromServer.readLine();
-                        String updateState = fromServer.readLine(); //login or logout
-                        System.out.println("the user " + userName + " " + updateState);
+                        String userName=fromServer.readLine();
+                        String updateState=fromServer.readLine();
+                        System.out.println("the user "+ userName+""+updateState);
                         playersList.clear();
-                        String playersNum = fromServer.readLine();
-                        System.out.println("number of users in list is " + playersNum);
-                        for (int i = 0; i < Integer.valueOf(playersNum); i++) {
+                        String playersNum=fromServer.readLine();
+                        for (int i=0;i< Integer.valueOf(playersNum);i++)
+                        {
                             playersList.add(receiveUserInfo());
                         }
-                        System.out.println("the list is ");
-                        for (User players : playersList) {
-                            System.out.println(players.userName + " state is " + players.state);
-                        }
-//                        SendAllInfoToGamePage(s, toServer, fromServer, playersList);
-                    } else if (isNumeric(mssg)) {
+                        SendAllInfoToGamePage(s, toServer, fromServer, playersList);
+                    }
+                                         
+                    else if(mssg.equals("resume"))
+                    {
+                        String savedGrid = fromServer.readLine();
+                        String lastMark = fromServer.readLine();
+                        new OneVsOne().resumeMatch(savedGrid, lastMark);
+                    }
+                   
+                    else if (mssg.equals("win")) {
+                        System.out.println("YOU WON YA BASHAAA");
+                        new OneVsOne().showResult("YOU WON YA BASHAAA");
+                    } 
+                    else if (mssg.equals("lose")) {
+                        System.out.println("You lost ");
+                        new OneVsOne().showResult("You lost ");
+
+                    }
+                    else if ( mssg.contains("chat")) {
+                        System.out.println("recieved f tictactoe");
+                        new OneVsOne().chatAppend(mssg);//the function that append to chat}
+
+                    }
+                    else if (isNumeric(mssg)) {
                         System.out.println("movement received");
+                       
                         new OneVsOne().setMark(Integer.valueOf(mssg));
-                    } else {
+                    
+                    }
+                    else {
                         System.out.println("unknown operation");
                         System.out.println(mssg);
                     }
