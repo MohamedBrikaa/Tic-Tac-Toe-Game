@@ -20,8 +20,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import static sample.Controller.invitedUser;
+import static sample.Controller.user;
 
 /**
  *
@@ -35,10 +38,10 @@ public class OneVsOne implements Initializable {
     static String myMark;
     static String opponentMark;
     static Button boards[][] = new Button[3][3];
-
-    @FXML
-
-    Button L1;
+    static String chatText;
+  @FXML Label name1,name2,score1,score2,whoseTurnLabel;
+  @FXML TextArea chatArea;
+  @FXML Button L1;
     @FXML
     Button L2;
     @FXML
@@ -59,6 +62,9 @@ public class OneVsOne implements Initializable {
     static GridPane grid;
     static Scene scene;
     static Stage stage;
+    static TextArea chatAREA;
+    static Label whoseTURNLABEL;
+    static Button[][] BOARD=new Button[3][3];;
 
     public void setL1() {
         Button btnPressed = boards[0][0];
@@ -113,9 +119,34 @@ public class OneVsOne implements Initializable {
 
     public void setMark(int index) {
         myTurn = true;
-        int row = index % 3;
-        int column = index / 3;
-        updateGUI(boards[row][column]);
+        if (index == 0) {
+            updateGUI(boards[0][0]);
+
+        } else if (index == 1) {
+            updateGUI(boards[1][0]);
+
+        } else if (index == 2) {
+            updateGUI(boards[2][0]);
+
+        } else if (index == 3) {
+            updateGUI(boards[0][1]);
+
+        } else if (index == 4) {
+            updateGUI(boards[1][1]);
+
+        } else if (index == 5) {
+            updateGUI(boards[2][1]);
+
+        } else if (index == 6) {
+            updateGUI(boards[0][2]);
+
+        } else if (index == 7) {
+            updateGUI(boards[1][2]);
+
+        } else if (index == 8) {
+            updateGUI(boards[2][2]);
+
+        }
 
     }
 
@@ -133,6 +164,9 @@ public class OneVsOne implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        chatAREA=chatArea;
+        whoseTURNLABEL=whoseTurnLabel;
+        BOARD=boards;
         boards[0][0] = L1;
         boards[1][0] = L2;
         boards[2][0] = L3;
@@ -142,8 +176,22 @@ public class OneVsOne implements Initializable {
         boards[0][2] = R1;
         boards[1][2] = R2;
         boards[2][2] = R3;
+        name1.setText(user);
+        score1.setText(String.valueOf(score));
+        name2.setText(invitedUserName);
+        score2.setText(String.valueOf(invitedUserScore));
+                
+    }
+    
+   
+    public void setChat(String mssg) {
+        System.out.println(mssg);
     }
 
+    public void pause(ActionEvent actionEvent) {
+        System.out.println("pause");
+        toServer.println("pause");
+    }
     private void sendMove(Button btnPressed, int index) {
         if (!(btnPressed.getText().equals("O") || btnPressed.getText().equals("X")) && myTurn) {
             {
@@ -164,5 +212,66 @@ public class OneVsOne implements Initializable {
 
             }
         });
+    }
+    static String user;
+    static Integer score;
+    
+    String recieveData(User myData)
+    {       
+        // myList.add(usr);
+        System.out.println(myData.userName);
+        user = myData.userName;
+        score = myData.score;
+
+        //pass=password;
+        return user;
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+ static String invitedUserName;
+ static Integer invitedUserScore;
+ 
+    void recieveInvitedUserData(User invitedUser)
+    {
+        invitedUserName=invitedUser.userName;
+        invitedUserScore=invitedUser.score;
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
+    void resumeMatch(String gridFromServer, String playerTurn){
+        for(int i=0;i<3;i++){
+            for(int j=0;j<3;j++){
+                BOARD[j][i].setText(Character.toString(gridFromServer.charAt(i+(3*j))));
+            }
+        }
+        
+        if(playerTurn.equals(myMark)){
+            myTurn=true;
+        }
+        else myTurn=false;
+    
+    }
+    public void showResult(String result){
+        whoseTURNLABEL.setText(result);
+       
+    }
+
+    void chatAppend(String mssg)
+    {
+        System.out.println("appending chat");
+        System.out.println(chatAREA);
+        chatAREA.appendText(mssg);
+    }
+    public void sendChat(ActionEvent actionEvent) {
+        
+        chatText= chatArea.getText();
+        chatText="chat "+chatText;
+        toServer.println(chatText);
+        System.out.println("send chat to server" + chatText);
+        
+        
+        
+       
     }
 }
