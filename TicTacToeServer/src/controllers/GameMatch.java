@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
 import models.*;
@@ -40,40 +35,52 @@ public class GameMatch {
           player1Id=UserModel.playerId(u1);
           player2Id=UserModel.playerId(u2);
           
-         //first check if there is a saved game???
-          
-          Match savedMatch=RecordMatch.getRecordedMatch(player1Id,player2Id);
-          
-          if(savedMatch== null){
-              System.out.println("A new Match");
-              for(int i=0;i<3;i++){
-                  for(int j=0;j<3;j++){
-                      grid[i][j]="-";
-                  }
-              }
-          }
-          else {
-              System.out.println("A saved Match");
-              for(int i=0;i<3;i++){
-                  for(int j=0;j<3;j++){
-                      grid[i][j]=savedMatch.grid[i][j];
-                  }
-              }
-              RecordMatch.removeMatch(savedMatch.matchId);
-          }
-          
-          System.out.println("this is s1 "+this.s1);
-          System.out.println("this is s2 "+this.s2);
-          
-          //initialize ps and assign X or O to each player
-         
-          ps[0]=new PrintStream(this.s1.getOutputStream());
-          ps[0].println(XO[0]);
-          
-       
-          ps[1]=new PrintStream(this.s2.getOutputStream());
-          ps[1].println(XO[1]);
-         
+
+            
+            //initialize ps and assign X or O to each player
+            ps[0] = new PrintStream(this.s1.getOutputStream());
+            ps[0].println(XO[0]);
+
+            ps[1] = new PrintStream(this.s2.getOutputStream());
+            ps[1].println(XO[1]);
+
+            //check if there is a saved game???
+            
+            
+            Match savedMatch = RecordMatch.getRecordedMatch(player1Id, player2Id);
+            
+            
+            if (savedMatch == null) {
+                System.out.println("A new Match");
+                for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        grid[i][j] = "-";
+                    }
+                }
+            } 
+            else {
+                
+                System.out.println("A resumed Match");
+                String currentGrid=resumeGame(savedMatch);
+                
+                ps[0].println("resume");
+                ps[1].println("resume");
+                
+                ps[0].println(currentGrid);
+                ps[1].println(currentGrid);
+                
+                String lastMark="";
+                if (savedMatch.playerTurn == 1) {
+                    lastMark = "O";
+                } else {
+                    lastMark = "X";
+                }
+                ps[0].println(lastMark);
+                ps[1].println(lastMark);
+                
+            }
+            
+
           
       } catch (IOException ex) {
           Logger.getLogger(GameMatch.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,15 +106,16 @@ public class GameMatch {
              int j = x / 3;
              grid[i][j] = XO[playerNumber];
              //go check if the game is still going 
+             
              if(!checkGrid()){
                 System.out.println("sending to "+users[(playerNumber+1)%2]+" and "+users[playerNumber]+" played in  "+msg);
                 System.out.println("");
                 ps[(playerNumber+1)%2].println(msg);
              }
              else {
-                // ps[playerNumber].println("win");
-                 //ps[(playerNumber+1)%2].println("lose");
                  UserModel.updatePlayerScore(users[playerNumber], 5);
+                 ps[playerNumber].println("win");
+                 ps[(playerNumber+1)%2].println("lose");
                  
              }    
                 
@@ -164,20 +172,48 @@ public class GameMatch {
  
  }
  
- public  boolean checkGrid(){
-     for(int i=0;i<3;i++){
-         if(grid[i][0]==grid[i][1] && grid[i][1]==grid[i][2] && grid[i][0]!="-"){
-             //sb won
-             return true;
-         }
-         else if(grid[0][i]==grid[1][i] && grid[1][i]==grid[2][i] && grid[0][i]!="-"){
-             return true;
-         }
-         
-     }
-     if(grid[0][0]==grid[1][1] && grid[1][1]==grid[2][2] && grid[0][0]!="-")return true;
-     else if(grid[0][2]==grid[1][1] && grid[1][1]== grid[2][0] && grid[1][1]!="-" )return true;
-     return false;
- }
+  public boolean checkGrid() {
+        for (int i = 0; i < 3; i++) {
+            if (grid[i][0].equals(grid[i][1]) && grid[i][1].equals(grid[i][2]) && !"-".equals(grid[i][0])) {
+                //sb won
+                return true;
+            } else if (grid[0][i].equals(grid[1][i]) && grid[1][i].equals(grid[2][i]) && !"-".equals(grid[0][i])) {
+                return true;
+            }
+
+        }
+        if (grid[0][0].equals(grid[1][1]) && grid[1][1].equals(grid[2][2]) && !"-".equals(grid[0][0])) {
+            return true;
+        }
+        else if (grid[0][2].equals(grid[1][1]) && grid[1][1].equals(grid[2][0]) && !"-".equals(grid[1][1])) {
+            return true;
+        }
+        return false;
+    }
+
+  String resumeGame(Match savedMatch) {
+        
+        String savedGrid="";
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                grid[i][j] = savedMatch.grid[i][j];
+                savedGrid+=grid[i][j].charAt(0);
+            }
+        }
+        RecordMatch.removeMatch(savedMatch.matchId);
+        return savedGrid;
+    }
+  
+  public static void main(String[] args) {
+        String[][] grid = {{"X", "X", "X"}, {"-", "-", "-"}, {"-", "-", "-"}};
+
+        String str="XOXOXOXOX";
+        char ch=str.charAt(0);
+        grid[0][0]=Character.toString(str.charAt(0));
+        str="";
+        str+=grid[0][0].charAt(0);
+        System.out.println(str);
+    }
+
 
 }
