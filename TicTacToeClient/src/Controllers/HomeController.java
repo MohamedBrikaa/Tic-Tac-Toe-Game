@@ -31,8 +31,8 @@ import static javafx.fxml.FXMLLoader.*;
 
 public class HomeController  implements Initializable  {
     static Socket socket;
-   static DataInputStream fromServer;
-   static PrintStream toServer;
+   static BufferedReader fromServer;
+   static PrintWriter toServer;
     static Vector<User> playerList;
     static Stage primaryStage;
     static GridPane grid;

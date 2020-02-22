@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 /** @author nourfayed */
 
 public class UserModel {
-  static final String DB_URL = "jdbc:mysql://localhost:3306/phpmyadmin";
+  static final String DB_URL = "jdbc:mysql://localhost:3306/tic-tac-toe";
    static final String DB_DRV = "com.mysql.jdbc.Driver";
    static final String DB_USER = "root";
    static final String DB_PASSWD = "";

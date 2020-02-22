@@ -1,14 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package models;
-/**
- *
- * @author Mohamed-Suliman
- */
+package Models;
+
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 public class User {
+ /*   public String userName;
+    public String password;
+    public User(){
+    }
+    public User(String userName, String password){
+        this.userName=userName;
+        this.password=password;
+    }
+*/
+
+
     public int userID;
     public String userName;
     public String email;
@@ -16,18 +22,71 @@ public class User {
     public String password;
     public String pic;
     public int score;
-    
-    public User(){
-    
+    private final SimpleStringProperty firstName = new SimpleStringProperty("");
+    private final SimpleStringProperty Score = new SimpleStringProperty("");
+    private final SimpleStringProperty Email = new SimpleStringProperty("");
+    private final SimpleStringProperty State = new SimpleStringProperty("");
+
+    public User() {
+
+
     }
-    public User(int userId,String userName,String email,String password,int score ,String pic,String state){
-        this.userID=userId;
-        this.userName=userName;
-        this.email=email;
-        this.state=state;
-        this.password=password;
-        this.score=score;
-        this.pic=pic;
+
+    public User(int userId, String userName, String email, String password, int score, String pic, String state) {
+        this.userID = userId;
+        this.userName = userName;
+        this.email = email;
+        this.state = state;
+        this.firstName.set(userName);
+        this.Score.set(String.valueOf(score));
+        this.State.set(state);
+        this.Email.set(email);
+        this.password = password;
+        this.score = score;
+        this.pic = pic;
     }
-    
+    public User(int userId,String userName,String email,String state,int score)
+    {
+        this.userID = userId;
+        this.userName = userName;
+        this.email = email;
+        this.state = state;
+        this.firstName.set(userName);
+        this.Score.set(String.valueOf(score));
+        this.Email.set(email);
+        this.State.set(state);
+        this.score = score;
+
+
+    }
+    public String getFirstName() {
+        return firstName.get();
+    }
+
+    public void setFirstName(String fName) {
+        firstName.set(fName);
+    }
+
+    public String getScore() {
+        return Score.get();
+    }
+
+    public void setScore(String score) {
+        Score.set(score);
+    }
+
+    public String getEmail() {
+        return Email.get();
+    }
+
+    public void setEmail(String email) {
+        Email.set(email);
+    }
+    public String getState() {
+        return State.get();
+    }
+
+    public void setState(String state) {
+        State.set(state);
+    }
 }

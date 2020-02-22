@@ -27,11 +27,11 @@ public class ClientGame {
     public void setButton(String index){
         //set button in GUI
 //        new OneVsOne().setC1();
-        try {
-            new OneVsOne().transferDataServerandClient("0");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            new OneVsOne().transferDataServerandClient("0");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

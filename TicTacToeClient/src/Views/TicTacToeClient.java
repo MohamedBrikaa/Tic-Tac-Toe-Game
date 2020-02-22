@@ -375,8 +375,7 @@ public class TicTacToeClient extends Application {
                                         e.printStackTrace();
                                     }
 
-                                    new OneVsOne().recieveSocket(s, toServer, fromServer,"O",currentUser.userName);
-
+                                    new OneVsOne().recieveSocket(toServer, fromServer,"O");
                                 } else {
                                     toServer.println("refused");
                                 }
@@ -394,7 +393,7 @@ public class TicTacToeClient extends Application {
                                 try {
                                     new HomeController().Loader("OneVsOne.fxml");
                                     currentUser.userName="hh";
-                                    new OneVsOne().recieveSocket(s, toServer, fromServer,"X",currentUser.userName);
+                                    new OneVsOne().recieveSocket( toServer, fromServer,"X");
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
