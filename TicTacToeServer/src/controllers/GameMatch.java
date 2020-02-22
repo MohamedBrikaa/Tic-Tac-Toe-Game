@@ -95,12 +95,8 @@ public class GameMatch {
              System.out.println(msg);
              pauseGame(playerNumber);
          }
-         /*
-         else if(playerNumber==8){
-             ps[0].println("tie");
-             ps[1].println("tie");
-         }*/
-         else if(Integer.parseInt(msg)>=0 && Integer.parseInt(msg)<9){
+        
+         else if(isNumeric(msg)){
              int x = Integer.parseInt(msg);
              int i = x % 3;
              int j = x / 3;
@@ -113,6 +109,7 @@ public class GameMatch {
                 ps[(playerNumber+1)%2].println(msg);
              }
              else {
+                
                  UserModel.updatePlayerScore(users[playerNumber], 5);
                  ps[playerNumber].println("win");
                  ps[(playerNumber+1)%2].println("lose");
@@ -120,10 +117,17 @@ public class GameMatch {
              }    
                 
          }
-         else {
-            msg=users[playerNumber]+" : "+msg;
+         else if(msg.contains("chat")) {
+            
+            System.out.println("chat received");
+            msg=msg.substring(4);
+            msg="chat "+users[playerNumber]+": "+msg;
             ps[playerNumber].println(msg);
             ps[(playerNumber+1)%2].println(msg); 
+            
+         }
+         else {
+             System.out.println("unknown ");
          }
          
          
@@ -203,17 +207,18 @@ public class GameMatch {
         RecordMatch.removeMatch(savedMatch.matchId);
         return savedGrid;
     }
-  
-  public static void main(String[] args) {
-        String[][] grid = {{"X", "X", "X"}, {"-", "-", "-"}, {"-", "-", "-"}};
-
-        String str="XOXOXOXOX";
-        char ch=str.charAt(0);
-        grid[0][0]=Character.toString(str.charAt(0));
-        str="";
-        str+=grid[0][0].charAt(0);
-        System.out.println(str);
+   public boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 
+  
 
 }
