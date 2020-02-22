@@ -71,16 +71,15 @@ public class ClientHandler extends Thread {
 
                     System.out.println("request logout");
                     closePlayerConnection(this, "OFFLINE");
-
+                    
                 } else if (isNumeric(mssg)) {
                     //send movement
                     System.out.println("Play Movement");
 //                    gameMatches.get(gameIndex).sendNewMove(mssg);
-                } else if(mssg.equals("accept")||mssg.equals("refused")){
+                } else if (mssg.equals("accept") || mssg.equals("refused")) {
                     //client accept or refuse invitation from another thread
                     invitationStatus.set(invitationIndex, mssg);
-                }
-                else {
+                } else {
                     System.out.println("unknown operation");
                     System.out.println(mssg);
                 }
@@ -138,8 +137,6 @@ public class ClientHandler extends Thread {
             user.state = "OFFLINE";
             refreshPlayersList();
             //refresh data in server GUI
-            GameServerGUI.updatePlayersTable();
-
             //send updates to clients and server
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,6 +144,7 @@ public class ClientHandler extends Thread {
         if (!(user.userName.isEmpty() && user.email.isEmpty() && user.password.isEmpty())) {
             if (UserModel.addPlayer(user)) {
                 ps.println("signupDone");
+                GameServerGUI.updatePlayersTable();
             } else {
                 ps.println("signupFailed");
             }
@@ -166,7 +164,7 @@ public class ClientHandler extends Thread {
         } catch (InterruptedException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         invitationStatus.add(new String("waiting"));
         this.invitationIndex = invitationStatus.size() - 1;
         invitedClient.invitationIndex = invitationStatus.size() - 1;
@@ -227,16 +225,16 @@ public class ClientHandler extends Thread {
     private static void closePlayerConnection(ClientHandler handler, String state) {
         try {
             System.out.println(handler.user.userName);
-            System.out.println(state);
             UserModel.updatePlayerState(handler.user.userName, state);
             handler.dis.close();
             handler.ps.close();
+            GameServerGUI.updatePlayersTable();
             handler.stop();
 
             onlinePlayers.remove(handler);
             onlinePlayersUNames.remove(handler.user.userName);
             playersList.remove(handler);
-            GameServerGUI.updatePlayersTable();
+         
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
