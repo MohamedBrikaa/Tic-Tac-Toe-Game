@@ -70,8 +70,9 @@ public class ClientHandler extends Thread {
                 } else if (mssg.equals("logout")) {
 
                     System.out.println("request logout");
+                    sendUpdatetoAllClients("logout");
                     closePlayerConnection(this, "OFFLINE");
-                    
+
                 } else if (isNumeric(mssg)) {
                     //send movement
                     System.out.println("Play Movement");
@@ -119,6 +120,7 @@ public class ClientHandler extends Thread {
                 refreshPlayersList();
                 sendPlayersList();
                 GameServerGUI.updatePlayersTable();
+                sendUpdatetoAllClients("login");
             } else {
                 ps.println("loginFailed");
             }
@@ -126,6 +128,18 @@ public class ClientHandler extends Thread {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void sendUpdatetoAllClients(String updateState) {
+        for (ClientHandler player : onlinePlayers) {
+            if (player.user.userID != this.user.userID) {
+                player.ps.println("updateStatus");
+                player.ps.println(this.user.userName);
+                player.ps.println(onlinePlayers.size() - 1);
+                player.ps.println(updateState);
+                sendPlayersList();
+            }
+        }
     }
 
     public void signUP() {
@@ -234,7 +248,7 @@ public class ClientHandler extends Thread {
             onlinePlayers.remove(handler);
             onlinePlayersUNames.remove(handler.user.userName);
             playersList.remove(handler);
-         
+
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
