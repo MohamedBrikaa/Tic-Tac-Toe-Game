@@ -3,6 +3,8 @@ package models;
 import controllers.User;
 import java.sql.Connection;
 import java.sql.Statement;
+//import com.mysql.jdbc.Connection;
+//import com.mysql.jdbc.Statement;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +16,7 @@ import java.util.logging.Logger;
 /** @author nourfayed */
 
 public class UserModel {
-  static final String DB_URL = "jdbc:mysql://localhost:3306/tic-tac-toe";
+   static final String DB_URL = "jdbc:mysql://localhost:3306/tic-tac-toe";
    static final String DB_DRV = "com.mysql.jdbc.Driver";
    static final String DB_USER = "root";
    static final String DB_PASSWD = "";
@@ -168,30 +170,29 @@ public class UserModel {
        }
       return false;
    }
-   public static int playerId(String username) {
-       try {
-           Connection connection = connect();
-           Statement statement = (Statement) connection.createStatement();
-           ResultSet resultSet=statement.executeQuery("SELECT * FROM users");
-           
-           
-           while(resultSet.next()){
-               
-               if(resultSet.getString("User_Name").equals(username)){
-                   //User user=new User(resultSet.getInt("User_ID"),resultSet.getString("User_Name"),resultSet.getString("Email"),resultSet.getString("Password"),resultSet.getInt("Points"),resultSet.getString("User_Pic"), resultSet.getString("State"));
-                   int id=resultSet.getInt("User_ID");
-                   resultSet.close();
-                   connection.close();
-                   return id;
-               }
-           }
-          
-       } catch (SQLException ex) {
-           Logger.getLogger(UserModel.class.getName()).log(Level.SEVERE, null, ex);
-       }
-        return -1;
-   }
+   
+//   public static void main(String[] args) {
+//   
+//       Vector<User>v=new Vector<>();
+//       v=returnAllPlayers();
+//       for(int i=0;i<v.size();i++){
+//           System.out.println(v.get(i).userName);
+//           System.out.println(v.get(i).score);
+//       }
+//       boolean b=UserModel.updatePlayerState("nour","ONLINE");
+//     //  System.out.println(b);
+//       
+//       boolean b2=UserModel.updatePlayerScore("nour", 3);
+//        System.out.println(b2);
+//        
+//      for(int i=0;i<v.size();i++){
+//           System.out.println(v.get(i).userName);
+//           System.out.println(v.get(i).score);
+//       }
+//   }
    
  
+   
+   
   
 }
