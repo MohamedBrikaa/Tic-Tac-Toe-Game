@@ -113,34 +113,9 @@ public class OneVsOne implements Initializable {
 
     public void setMark(int index) {
         myTurn = true;
-        if (index == 0) {
-            updateGUI(boards[0][0]);
-
-        } else if (index == 1) {
-            updateGUI(boards[1][0]);
-
-        } else if (index == 2) {
-            updateGUI(boards[2][0]);
-
-        } else if (index == 3) {
-            updateGUI(boards[0][1]);
-
-        } else if (index == 4) {
-            updateGUI(boards[1][1]);
-
-        } else if (index == 5) {
-            updateGUI(boards[2][1]);
-
-        } else if (index == 6) {
-            updateGUI(boards[0][2]);
-
-        } else if (index == 7) {
-            updateGUI(boards[1][2]);
-
-        } else if (index == 8) {
-            updateGUI(boards[2][2]);
-
-        }
+        int row = index % 3;
+        int column = index / 3;
+        updateGUI(boards[row][column]);
 
     }
 
