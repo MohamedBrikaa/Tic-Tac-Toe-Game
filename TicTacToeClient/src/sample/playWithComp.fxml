@@ -148,9 +148,14 @@
                </font></Button>
          </children>
       </AnchorPane>
-      <Label layoutX="46.0" layoutY="52.0" prefHeight="84.0" prefWidth="335.0" text="Let's play!" textFill="#e3a600">
+      <Label  layoutX="46.0" layoutY="52.0" prefHeight="84.0" prefWidth="335.0" text="Let's play!" textFill="#e3a600">
          <font>
             <Font name="A bite" size="33.0" />
+         </font>
+      </Label>
+      <Label fx:id="level" layoutX="150" layoutY="10" prefHeight="84.0" prefWidth="335.0" text="Please Chosse Level First: " textFill="#e3a600">
+         <font>
+            <Font name="A bite" size="24.0" />
          </font>
       </Label>
       <Label layoutX="169.0" layoutY="176.0" prefHeight="38.0" prefWidth="162.0" text="Your Score: " textFill="WHITE">
@@ -187,6 +192,21 @@
          </effect>
       </Button>
       <Button fx:id="hardLevel" layoutX="450.0" layoutY="76.0" mnemonicParsing="false" onAction="#chooseHardLevel" prefHeight="38.0" prefWidth="90.0" text="Hard Level">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <effect>
+            <Lighting diffuseConstant="0.95" specularConstant="0.83" specularExponent="18.14" surfaceScale="2.43">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#fc0202" />
+               </light>
+            </Lighting>
+         </effect>
+      </Button>
+      <Button fx:id="reset" layoutX="450.0" layoutY="550.0" mnemonicParsing="false" onAction="#resetGame" prefHeight="38.0" prefWidth="90.0" text="Reset">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>

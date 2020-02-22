@@ -20,6 +20,7 @@ public class GameController implements Initializable {
     static boolean gameOver = false;
     static String player = "O", opponent = "X";
     static String gameLevel = "unknown";
+    static Label lvl;
 
     static class Move {
 
@@ -45,6 +46,8 @@ public class GameController implements Initializable {
     Button R2;
     @FXML
     Button R3;
+    @FXML
+    Label level;
 
     Button[][] board;
 
@@ -89,7 +92,7 @@ public class GameController implements Initializable {
 
     }
 
-    public void resetGame() {
+    public void resetGame(ActionEvent actionEvent) {
         for (Button[] board1 : board) {
             for (Button btn : board1) {
                 btn.setText("");
@@ -97,6 +100,7 @@ public class GameController implements Initializable {
         }
         gameOver = false;
         gameLevel = "unknown";
+        lvl.setText("Please Choose Level");
     }
 
     public void playerPlay(Button btnPressed) {
@@ -166,6 +170,8 @@ public class GameController implements Initializable {
         board[2][2] = R3;
         gameLevel = "unknown";
         gameOver = false;
+        lvl = level;
+        lvl.setText("Please Choose Level");
     }
 
     public void chooseEasyLevel(ActionEvent actionEvent) {
@@ -173,6 +179,7 @@ public class GameController implements Initializable {
         if (gameLevel.equals("unknown")) {
             System.out.println("You choose Easy");
             gameLevel = "easy";
+            lvl.setText(gameLevel);
         }
     }
 
@@ -180,6 +187,7 @@ public class GameController implements Initializable {
         if (gameLevel.equals("unknown")) {
             System.out.println("You choose Hard");
             gameLevel = "hard";
+            lvl.setText(gameLevel);
         }
     }
 
