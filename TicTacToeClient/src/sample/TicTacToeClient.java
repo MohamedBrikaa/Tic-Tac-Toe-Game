@@ -331,6 +331,21 @@ public class TicTacToeClient extends Application {
                         });
 
                     } else if (mssg.equals("updateStatus")) {
+                        System.out.println(mssg);
+                        String userName = fromServer.readLine();
+                        String updateState = fromServer.readLine(); //login or logout
+                        System.out.println("the user " + userName + " " + updateState);
+                        playersList.clear();
+                        String playersNum = fromServer.readLine();
+                        System.out.println("number of users in list is " + playersNum);
+                        for (int i = 0; i < Integer.valueOf(playersNum); i++) {
+                            playersList.add(receiveUserInfo());
+                        }
+                        System.out.println("the list is ");
+                        for (User players : playersList) {
+                            System.out.println(players.userName + " state is " + players.state);
+                        }
+//                        SendAllInfoToGamePage(s, toServer, fromServer, playersList);
                     } else if (isNumeric(mssg)) {
                         System.out.println("movement received");
                         new OneVsOne().setMark(Integer.valueOf(mssg));

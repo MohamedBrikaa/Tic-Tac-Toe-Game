@@ -70,11 +70,10 @@ public class ClientHandler extends Thread {
                 } else if (mssg.equals("logout")) {
 
                     System.out.println("request logout");
-//                    sendUpdatetoAllClients("logout");
+                    sendUpdatetoAllClients("logout");
                     closePlayerConnection(this, "OFFLINE");
 
-                } else if (isNumeric(mssg)) {
-                    //send movement
+                }else if (isNumeric(mssg)||mssg.contains("chat")||mssg.equals("pause")) {                    //send movement
                     System.out.println("Play Movement");
                     gameMatches.get(gameIndex).sendNewMove(mssg);
                 } else if (mssg.equals("accept") || mssg.equals("refused")) {
@@ -115,12 +114,12 @@ public class ClientHandler extends Thread {
                 onlinePlayersUNames.add(userName);
 
                 ps.println("loginDone");
-                sendUserInfo(user);
+                sendUserInfo(this.ps, user);
                 //refresh players list and send the player list to the player
                 refreshPlayersList();
                 sendPlayersList();
                 GameServerGUI.updatePlayersTable();
-//                sendUpdatetoAllClients("login");
+                sendUpdatetoAllClients("login");
             } else {
                 ps.println("loginFailed");
             }
@@ -132,12 +131,26 @@ public class ClientHandler extends Thread {
 
     public void sendUpdatetoAllClients(String updateState) {
         for (ClientHandler player : onlinePlayers) {
-            if (player.user.userID != this.user.userID) {
+            if (player.user.userID != user.userID) {
                 player.ps.println("updateStatus");
                 player.ps.println(this.user.userName);
-                player.ps.println(onlinePlayers.size() - 1);
                 player.ps.println(updateState);
-                sendPlayersList();
+                player.ps.println(playersList.size() - 1);
+                for (int i = 0; i < playersList.size(); i++) {
+                    if (playersList.get(i).userID != player.user.userID) {
+                        sendUserInfo(player.ps, playersList.get(i));
+                    }
+                }
+            }
+        }
+    }
+
+    public void sendPlayersList() {
+        ps.println(playersList.size() - 1);
+        for (int i = 0; i < playersList.size(); i++) {
+            if (playersList.get(i).userID != user.userID) {
+                System.out.println("send player " + playersList.get(i).userName);
+                sendUserInfo(this.ps, playersList.get(i));
             }
         }
     }
@@ -202,8 +215,8 @@ public class ClientHandler extends Thread {
     private User getUserInfo(String userName) {
         return UserModel.playerInfo(userName);
     }
-
-    public void sendUserInfo(User user) {
+    
+    public void sendUserInfo(PrintWriter ps, User user) {
         ps.println(user.userID);
         ps.println(user.userName);
         ps.println(user.email);
@@ -214,16 +227,7 @@ public class ClientHandler extends Thread {
     public void refreshPlayersList() {
         playersList = UserModel.returnAllPlayers();
     }
-
-    public void sendPlayersList() {
-        ps.println(playersList.size() - 1);
-        for (int i = 0; i < playersList.size(); i++) {
-            if (playersList.get(i).userID != user.userID) {
-                sendUserInfo(playersList.get(i));
-            }
-        }
-    }
-
+    
     public static void closeAllInternalSockets() {
         for (ClientHandler player : onlinePlayers) {
             player.ps.println("serveroff");
