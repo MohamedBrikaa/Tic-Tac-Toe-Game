@@ -23,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import javafx.scene.control.TextArea;
 /**
  *
  * @author Basant Mahrous
@@ -35,7 +36,12 @@ public class OneVsOne implements Initializable {
     static String myMark;
     static String opponentMark;
     static Button boards[][] = new Button[3][3];
-
+  @FXML
+    Label name1, name2, score1, score2;
+    @FXML
+    TextArea chatArea;
+    @FXML
+    Label whoseTurnLabel;
     @FXML
 
     Button L1;
@@ -142,6 +148,36 @@ public class OneVsOne implements Initializable {
         boards[0][2] = R1;
         boards[1][2] = R2;
         boards[2][2] = R3;
+                name1.setText(user);
+        score1.setText(String.valueOf(score));
+        name2.setText(invitedUserName);
+        score2.setText(String.valueOf(invitedUserScore));
+        whoseTurnLabel.setText("");
+    }
+        static String user;
+    static Integer score;
+
+    String recieveData(User myData)
+    {
+        System.out.println(myData.userName);
+        user = myData.userName;
+        score = myData.score;
+
+        return user;
+
+    }
+    static String invitedUserName;
+    static Integer invitedUserScore;
+
+    void recieveInvitedUserData(User invitedUser)
+    {
+        invitedUserName = invitedUser.userName;
+        invitedUserScore = invitedUser.score;
+
+    }
+        void resumeMatch()
+    {
+
     }
 
     private void sendMove(Button btnPressed, int index) {
@@ -164,5 +200,9 @@ public class OneVsOne implements Initializable {
 
             }
         });
+    }
+      void recieveResult(String res)
+    {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
