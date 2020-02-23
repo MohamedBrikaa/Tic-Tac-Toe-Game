@@ -116,7 +116,7 @@ public class TicTacToeClient extends Application {
         grid.add(EmailTextField, 1, 8);
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 10);
-        TextField IPTextField = new TextField();
+        TextField IPTextField = new TextField("127.0.0.1");
         grid.add(IPTextField, 0, 24);
         Button connectBtn = new Button("Connect");
         grid.add(connectBtn, 0, 25);
