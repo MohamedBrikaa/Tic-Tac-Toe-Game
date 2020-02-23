@@ -43,6 +43,9 @@ public class Controller implements Initializable {
     static Scene scene;
     static Stage stage;
     static User invitedUser;
+      static User invitedUser;
+    static String invitedUserName;
+     static Integer invitedUserScore;
     @FXML
     Label label;
     @FXML
@@ -176,9 +179,15 @@ public class Controller implements Initializable {
     
     public void show(MouseEvent mouseEvent) {
         invitedUser = (User) tableView.getSelectionModel().getSelectedItem();
+         sendInvitedUserDatatoOneVsOnePage(invitedUser);
         // System.out.println(invitedUser.userName);
 
     }
+        private void sendInvitedUserDatatoOneVsOnePage(User invitedUser)
+    { new OneVsOne().recieveInvitedUserData(invitedUser);
+        
+    }
+      
     
     void emptyTable() {
         
