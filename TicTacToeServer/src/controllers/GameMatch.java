@@ -50,14 +50,14 @@ public class GameMatch {
             Match savedMatch = RecordMatch.getRecordedMatch(player1Id, player2Id);
             
             
-           // if (savedMatch == null) {
+            if (savedMatch == null) {
                 System.out.println("A new Match");
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         grid[i][j] = "-";
                     }
                 }
-           /* } 
+            } 
             else {
                 
                 System.out.println("A resumed Match");
@@ -79,7 +79,7 @@ public class GameMatch {
                 ps[1].println(lastMark);
                 
             }
-            */
+            
 
           
       } catch (IOException ex) {
@@ -156,20 +156,6 @@ public class GameMatch {
       
      //insert match to database
      boolean b=RecordMatch.addMatch(player1Id,player2Id,grid,playerNumber);
-     
-     //close everything 
-    try {
-         for(int i=0;i<2;i++){
-                
-                 ps[i].close();          
-            }
-         s1.close();
-         s2.close();
-         //send to both player
-         
-     } catch (IOException ex) {
-             Logger.getLogger(GameMatch.class.getName()).log(Level.SEVERE, null, ex);
-         }
     
     
  
