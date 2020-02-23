@@ -202,6 +202,11 @@ public class ClientHandler extends Thread {
         if (invitatonReply.equals("accept")) {
             //recive accept
             this.ps.println("invitationAccepted");
+            try {
+            this.sleep(500);
+             } catch (InterruptedException ex) {
+            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+             }
             gameMatches.add(new GameMatch(this.user.userName, userName, this.s, invitedClient.s));
             this.gameIndex = gameMatches.size() - 1;
             invitedClient.gameIndex = gameMatches.size() - 1;
