@@ -458,6 +458,12 @@ TextField IPTextField = new TextField();
                         controller = loader.getController();
                         controller.SetCurrentUserInfo(currentUser.userName, currentUser.score);
                     } 
+                    else if(mssg.equals("resume"))
+                    {
+                        String savedGrid = fromServer.readLine();
+                        String lastMark = fromServer.readLine();
+                        new OneVsOne().resumeMatch(savedGrid, lastMark);
+                    }
                     else if (mssg.equals("win")) {
                         System.out.println("YOU WON YA BASHAAA");
                         new OneVsOne().showResult("YOU WON YA BASHAAA");
