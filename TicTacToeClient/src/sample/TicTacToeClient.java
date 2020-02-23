@@ -1,5 +1,10 @@
-package sample;
+package Views;
 
+
+import Controllers.ClientGame;
+import Controllers.HomeController;
+import Controllers.OneVsOne;
+import Models.User;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -36,23 +41,26 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class TicTacToeClient extends Application {
 
     private ServerSocket server = null;
     Socket s;
+    ClientGame game;
     String serverMessage = "";
     PrintWriter toServer = null;
     BufferedReader fromServer;
     String mssg;
-    static Vector<User> playersList = new Vector<>();
+    static Vector<Models.User> playersList = new Vector<>();
     User currentUser;
     boolean loggedIn = false;
     boolean isServerOn = false;
     FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
-
-    Controller controller = loader.getController();
-
+    FXMLLoader MultiPlayer = new FXMLLoader(getClass().getResource("OneVsOne.fxml"));
+    Controllers.HomeController controller = loader.getController();
+    static Stage primaryStage;
+    static Parent root ;
     public void init() {
 
         try {
@@ -71,6 +79,7 @@ public class TicTacToeClient extends Application {
         primaryStage.setTitle("Login Here!");
 
         GridPane grid = new GridPane();
+        grid.getStyleClass().addAll("pane","grid");
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
@@ -93,11 +102,13 @@ public class TicTacToeClient extends Application {
         grid.add(pwBox, 1, 2);
 
         Button btn = new Button("Sign in");
+        btn.setId("btnLogin");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
         grid.add(hbBtn, 1, 4);
         Button Signupbtn = new Button("Sign up");
+        Signupbtn.setId("btnLogin");
         HBox HsignUpBtn = new HBox(10);
         HsignUpBtn.setAlignment(Pos.BOTTOM_RIGHT);
         HsignUpBtn.getChildren().add(Signupbtn);
@@ -136,15 +147,17 @@ public class TicTacToeClient extends Application {
                 toServer.println(Password);
                 try {
                     mssg = fromServer.readLine();
+
                     if (mssg.equals("loginDone")) {
                         handleLoginOpeartionWithServer();
                         primaryStage.setScene(new Scene(root, 556, 630));
-                        Controller controller = loader.getController();
+                        HomeController controller = loader.getController();
                         controller.SetCurrentUserInfo(currentUser.userName, currentUser.score);
                         ClientListner listner = new ClientListner();
                         listner.start();
                         primaryStage.show();
                     } else if (mssg.equals("loginFailed")) {
+                        actiontarget.setText("login Failed, Please try again");
                         System.out.println("login Failed Please try again");
                     }
                 } catch (IOException ex) {
@@ -166,35 +179,75 @@ public class TicTacToeClient extends Application {
                 System.out.println(name);
                 System.out.println(Pass);
                 System.out.println(Email);
-                toServer.println("signup");
-                toServer.println(name);
-                toServer.println(Pass);
-                toServer.println(Email);
-
-                try {
-                    mssg = fromServer.readLine();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                String error = "";
+                String regexName = "\\p{Upper}(\\p{Lower}+\\s?)";
+                String patternName = "(" + regexName + "){2,3}";
+                System.out.println("The name is: " + name);
+                System.out.println("Is the above name valid? " + name.matches(patternName));
+                boolean nameResult = name.matches(patternName);
+                String regexEmail = "^(.+)@(.+)$";
+                Pattern patternEmail = Pattern.compile(regexEmail);
+                System.out.println("Is the above Email valid? " + Email.matches(String.valueOf(patternEmail)));
+                boolean EmailResult = Email.matches(String.valueOf(patternEmail));
+                String regexPass = "((?=.*\\d)(?=.*[@#$%!]).{5,40})";
+                Pattern patternPass = Pattern.compile(regexPass);
+                System.out.println("Is the above Pass valid? " + Pass.matches(String.valueOf(patternPass)));
+                boolean passResult = Pass.matches(String.valueOf(patternPass));
+                if (name.equals("") || Pass.equals("") || Email.equals("")) {
+                    error = "Please Fill All Inputs\n";
+                    signUpActiontarget.setText(error);
                 }
-                if (mssg.equals("signupDone")) {
+                if (nameResult == false) {
 
-                    System.out.println("Sign up Done");
-                    signUpActiontarget.setFill(Color.FIREBRICK);
-                    signUpActiontarget.setText("Signed up successfully, Please Login");
+                    error += "Please Enter Valid Name\n";
+                    signUpActiontarget.setText(error);
+                }
+                if (EmailResult == false) {
+                    error += "Please Enter Valid Email\n";
+                    signUpActiontarget.setText(error);
+                }
+                if (passResult == false) {
+                    error += "Please Enter Valid Password\n";
+                    signUpActiontarget.setText(error);
+                } else {
+                    toServer.println("signup");
+                    toServer.println(name);
+                    toServer.println(Pass);
+                    toServer.println(Email);
 
-                } else if (mssg.equals("signupFailed")) {
+                    try {
+                        mssg = fromServer.readLine();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {if (mssg.equals("signupDone")) {
 
-                    System.out.println("Sign up Failed Please try again");
-                    signUpActiontarget.setFill(Color.FIREBRICK);
-                    signUpActiontarget.setText("Sign up Failed Please try again");
+                            System.out.println("Sign up Done");
+                            signUpActiontarget.setFill(Color.FIREBRICK);
+                            signUpActiontarget.setText("Signed up successfully, Please Login");
+
+                        } else if (mssg.equals("signupFailed")) {
+
+                            System.out.println("Sign up Failed Please try again");
+                            signUpActiontarget.setFill(Color.FIREBRICK);
+                            signUpActiontarget.setText("Sign up Failed Please try again");
+
+                        }
+
+
+                        }
+                    });
 
                 }
-
             }
         });
 
         Scene scene = new Scene(grid, 556, 630);
-        new Controller().LoadLoginPage(primaryStage, grid, scene);
+        scene.getStylesheets().add("Views/controlStyle1.css");
+        new HomeController().LoadLoginPage(primaryStage, grid, scene);
+
     }
 
     private User receiveUserInfo() {
@@ -228,9 +281,11 @@ public class TicTacToeClient extends Application {
             int playersNum = Integer.valueOf(fromServer.readLine());
             for (int i = 0; i < playersNum; i++) {
                 playersList.add(receiveUserInfo());
+                printUserData(playersList.get(i));
             }
             SendAllInfoToGamePage(s, toServer, fromServer, playersList);
         } catch (IOException ex) {
+            System.out.println(ex);
             Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -248,18 +303,20 @@ public class TicTacToeClient extends Application {
             s.close();
             super.stop();
         } catch (IOException ex) {
-            Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+
         } catch (Exception ex) {
-            Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
+
         }
     }
 
     private void SendDataToHomePage(User newUser) {
-        new Controller().recieveData(newUser);
+        new HomeController().recieveData(newUser);
     }
 
     private void SendAllInfoToGamePage(Socket socket, PrintWriter toServer, BufferedReader fromServer, Vector<User> playerList) {
-        new Controller().recieveSocket(socket, toServer, fromServer, playerList);
+        new HomeController().recieveSocket(socket, toServer, fromServer, playerList);
     }
 
     public static void main(String[] args) {
@@ -308,50 +365,61 @@ public class TicTacToeClient extends Application {
                                 ButtonType accept = new ButtonType("Accept");
                                 ButtonType reject = new ButtonType("Reject");
                                 alert.getButtonTypes().setAll(accept, reject);
-//                                alert.show();
                                 Optional<ButtonType> result = alert.showAndWait();
                                 if (result.get() == accept) {
                                     toServer.println("accept");
                                     System.out.println("invitation from " + invitingPlayerUserName + "player accepted");
-                                    new Controller().FXMLLoader("OneVsOne.fxml");
-                                    new OneVsOne().recieveSocket(toServer, fromServer, "O");
+
+//                                    game = new ClientGame(s, fromServer, toServer, "O");
+//                                    SendAllInfoToGamePage(s, toServer, fromServer, playersList);
+                                    try {
+                                        new HomeController().Loader("OneVsOne.fxml");
+                                   //     new OneVsOne().setInfo("hh",9);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    new OneVsOne().recieveSocket(toServer, fromServer,"O");
                                 } else {
                                     toServer.println("refused");
                                 }
                             }
+
                         });
 
                     } else if (mssg.equals("invitationAccepted")) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                new Controller().FXMLLoader("OneVsOne.fxml");
-                                new OneVsOne().recieveSocket(toServer, fromServer, "X");
+//                                game = new ClientGame(s, fromServer, toServer, "X");
+//                                SendAllInfoToGamePage(s, toServer, fromServer, playersList);
+
+                                try {
+                                    new HomeController().Loader("OneVsOne.fxml");
+                                    currentUser.userName="hh";
+                                    new OneVsOne().recieveSocket( toServer, fromServer,"X");
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+
+
+
+
+
+//                                System.out.println(game.mark);
+//                                System.out.println(game.msg);
                             }
                         });
 
                     } else if (mssg.equals("updateStatus")) {
-                        System.out.println(mssg);
-                        String userName = fromServer.readLine();
-                        String updateState = fromServer.readLine(); //login or logout
-                        System.out.println("the user " + userName + " " + updateState);
-                        playersList.clear();
-                        String playersNum = fromServer.readLine();
-                        System.out.println("number of users in list is " + playersNum);
-                        for (int i = 0; i < Integer.valueOf(playersNum); i++) {
-                            playersList.add(receiveUserInfo());
-                        }
-                        System.out.println("the list is ");
-                        for (User players : playersList) {
-                            System.out.println(players.userName + " state is " + players.state);
-                        }
-//                        SendAllInfoToGamePage(s, toServer, fromServer, playersList);
                     } else if (isNumeric(mssg)) {
                         System.out.println("movement received");
                         new OneVsOne().setMark(Integer.valueOf(mssg));
                     } else {
                         System.out.println("unknown operation");
                         System.out.println(mssg);
+//                        game.setButton(mssg);
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
