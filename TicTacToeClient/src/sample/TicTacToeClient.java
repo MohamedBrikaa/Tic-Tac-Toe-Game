@@ -345,7 +345,10 @@ public class TicTacToeClient extends Application {
                         for (User players : playersList) {
                             System.out.println(players.userName + " state is " + players.state);
                         }
-//                        SendAllInfoToGamePage(s, toServer, fromServer, playersList);
+
+                        SendAllInfoToGamePage(s, toServer, fromServer, playersList);
+                        controller = loader.getController();
+                        controller.SetCurrentUserInfo(currentUser.userName, currentUser.score);
                     } else if (isNumeric(mssg)) {
                         System.out.println("movement received");
                         new OneVsOne().setMark(Integer.valueOf(mssg));

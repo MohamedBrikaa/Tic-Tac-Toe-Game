@@ -68,6 +68,13 @@ public User(int userId,String userName,String email,String state,int score)
     public void setFirstName(String fName) {
         firstName.set(fName);
     }
+    public String getState() {
+        return State.get();
+    }
+
+    public void setState(String state) {
+        State.set(state);
+    }
 
     public String getScore() {
         return Score.get();

@@ -157,6 +157,7 @@ public class Controller implements Initializable {
         ObservableList<User> data = tableView.getItems();
 
         for (int i = 0; i < playerList.size(); i++) {
+            System.out.println(playerList.get(i).userName+" "+playerList.get(i).state);
             data.add(new User(playerList.get(i).userID, playerList.get(i).userName, playerList.get(i).email, playerList.get(i).state, playerList.get(i).score));
         }
 
