@@ -194,6 +194,8 @@ public class TicTacToeClient extends Application {
         });
 
         Scene scene = new Scene(grid, 556, 630);
+        scene.getStylesheets().add("Views/controlStyle1.css");
+        grid.setStyle("-fx-background-image: url('/Views/2.jfif')");
         new Controller().LoadLoginPage(primaryStage, grid, scene);
     }
 
