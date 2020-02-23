@@ -446,7 +446,23 @@ TextField IPTextField = new TextField();
                         SendAllInfoToGamePage(s, toServer, fromServer, playersList);
                         controller = loader.getController();
                         controller.SetCurrentUserInfo(currentUser.userName, currentUser.score);
-                    } else if (isNumeric(mssg)) {
+                    } 
+                    else if (mssg.equals("win")) {
+                        System.out.println("YOU WON YA BASHAAA");
+                        new OneVsOne().showResult("YOU WON YA BASHAAA");
+                    } 
+                    else if (mssg.equals("lose")) {
+                        System.out.println("You lost ");
+                        new OneVsOne().showResult("You lost ");
+
+                    }
+                    else if ( mssg.contains("chat")) {
+                        System.out.println("recieved f tictactoe");
+                        new OneVsOne().chatAppend(mssg);//the function that append to chat}
+
+                    }
+                    
+                    else if (isNumeric(mssg)) {
                         System.out.println("movement received");
                         new OneVsOne().setMark(Integer.valueOf(mssg));
                     } else {
