@@ -36,6 +36,8 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.controlsfx.control.Notifications;
+
 
 public class TicTacToeClient extends Application {
 
@@ -432,6 +434,15 @@ TextField IPTextField = new TextField();
                         String userName = fromServer.readLine();
                         String updateState = fromServer.readLine(); //login or logout
                         System.out.println("the user " + userName + " " + updateState);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Notifications.create()
+                                        .title("Hey!")
+                                        .text("A notification !! User " + userName + " has " + updateState).darkStyle()
+                                        .showInformation();
+                            }
+                        });
                         playersList.clear();
                         String playersNum = fromServer.readLine();
                         System.out.println("number of users in list is " + playersNum);
