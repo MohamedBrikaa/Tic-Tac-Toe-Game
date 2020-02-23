@@ -50,14 +50,14 @@ public class GameMatch {
             Match savedMatch = RecordMatch.getRecordedMatch(player1Id, player2Id);
             
             
-            if (savedMatch == null) {
+           // if (savedMatch == null) {
                 System.out.println("A new Match");
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
                         grid[i][j] = "-";
                     }
                 }
-            } 
+           /* } 
             else {
                 
                 System.out.println("A resumed Match");
@@ -79,7 +79,7 @@ public class GameMatch {
                 ps[1].println(lastMark);
                 
             }
-            
+            */
 
           
       } catch (IOException ex) {
@@ -95,24 +95,20 @@ public class GameMatch {
              System.out.println(msg);
              pauseGame(playerNumber);
          }
-         /*
-         else if(playerNumber==8){
-             ps[0].println("tie");
-             ps[1].println("tie");
-         }*/
-         else if(Integer.parseInt(msg)>=0 && Integer.parseInt(msg)<9){
+        
+         else if(isNumeric(msg)){
              int x = Integer.parseInt(msg);
              int i = x % 3;
              int j = x / 3;
              grid[i][j] = XO[playerNumber];
              //go check if the game is still going 
              
-             if(!checkGrid()){
+             
                 System.out.println("sending to "+users[(playerNumber+1)%2]+" and "+users[playerNumber]+" played in  "+msg);
                 System.out.println("");
                 ps[(playerNumber+1)%2].println(msg);
-             }
-             else {
+                
+                if(checkGrid()){
                  UserModel.updatePlayerScore(users[playerNumber], 5);
                  ps[playerNumber].println("win");
                  ps[(playerNumber+1)%2].println("lose");
@@ -120,10 +116,17 @@ public class GameMatch {
              }    
                 
          }
-         else {
-            msg=users[playerNumber]+" : "+msg;
+         else if(msg.contains("chat")) {
+            
+            System.out.println("chat received");
+            msg=msg.substring(4);
+            msg="chat "+users[playerNumber]+": "+msg;
             ps[playerNumber].println(msg);
             ps[(playerNumber+1)%2].println(msg); 
+            
+         }
+         else {
+             System.out.println("unknown ");
          }
          
          
@@ -162,7 +165,7 @@ public class GameMatch {
             }
          s1.close();
          s2.close();
-         //send to both players 2enna shatabna?
+         //send to both player
          
      } catch (IOException ex) {
              Logger.getLogger(GameMatch.class.getName()).log(Level.SEVERE, null, ex);
@@ -203,17 +206,23 @@ public class GameMatch {
         RecordMatch.removeMatch(savedMatch.matchId);
         return savedGrid;
     }
-  
-  public static void main(String[] args) {
-        String[][] grid = {{"X", "X", "X"}, {"-", "-", "-"}, {"-", "-", "-"}};
-
-        String str="XOXOXOXOX";
-        char ch=str.charAt(0);
-        grid[0][0]=Character.toString(str.charAt(0));
-        str="";
-        str+=grid[0][0].charAt(0);
-        System.out.println(str);
+   public boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
+
+  
+
+
+
+
 
 
 }
