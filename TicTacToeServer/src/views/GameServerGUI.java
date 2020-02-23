@@ -130,6 +130,8 @@ public class GameServerGUI extends Application {
         root.setBottom(bottom);
 //        root.setStyle("-fx-background-image: url('https://games.lol/wp-content/uploads/2018/11/x-o-tic-tac-toe-pc-download.png')");
         Scene scene = new Scene(root, 300, 250);
+        scene.getStylesheets().add("views/serverCascadeStyleSheet.css");
+        scene.getStylesheets().add("views/styleSheet.css");
         primaryStage.setWidth(600);
         primaryStage.setHeight(500);
         primaryStage.setTitle("Game Server");
