@@ -1,4 +1,5 @@
 package sample;
+
 import java.util.regex.Pattern;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -37,7 +38,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.controlsfx.control.Notifications;
-
 
 public class TicTacToeClient extends Application {
 
@@ -116,12 +116,11 @@ public class TicTacToeClient extends Application {
         grid.add(EmailTextField, 1, 8);
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 10);
-TextField IPTextField = new TextField();
+        TextField IPTextField = new TextField();
         grid.add(IPTextField, 0, 24);
         Button connectBtn = new Button("Connect");
         grid.add(connectBtn, 0, 25);
-        
-        
+
         final Text signActiontarget = new Text();
         grid.add(signActiontarget, 1, 10);
         final Text sigupNameInstruction = new Text();
@@ -135,12 +134,10 @@ TextField IPTextField = new TextField();
         sigupNameInstruction.setFont(Font.font("Tahoma", FontWeight.THIN, 12));
         sigupPassInstruction.setText("* Password: [4-8] Numbers & contains shape ");
 
-        connectBtn.setOnAction(new EventHandler<ActionEvent>()
-        {
+        connectBtn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
-            public void handle(ActionEvent event)
-            {
+            public void handle(ActionEvent event) {
                 String IP = IPTextField.getText();
                 try {
                     s = new Socket(IP, 20080);
@@ -186,11 +183,9 @@ TextField IPTextField = new TextField();
         final Text signUpActiontarget = new Text();
         grid.add(signUpActiontarget, 1, 11);
 
-        Signupbtn.setOnAction(new EventHandler<ActionEvent>()
-        {
+        Signupbtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public void handle(ActionEvent e)
-            {
+            public void handle(ActionEvent e) {
 
                 String name = SignUp_nameTextField.getText();
                 String Pass = SignUp_enterPwBox.getText();
@@ -240,11 +235,9 @@ TextField IPTextField = new TextField();
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
-                    Platform.runLater(new Runnable()
-                    {
+                    Platform.runLater(new Runnable() {
                         @Override
-                        public void run()
-                        {
+                        public void run() {
                             if (mssg.equals("signupDone")) {
 
                                 System.out.println("Sign up Done");
@@ -336,13 +329,12 @@ TextField IPTextField = new TextField();
     private void SendAllInfoToGamePage(Socket socket, PrintWriter toServer, BufferedReader fromServer, Vector<User> playerList) {
         new Controller().recieveSocket(socket, toServer, fromServer, playerList);
     }
-      private void SendDataToOneVsOnePage(User newUser)
-    {
+
+    private void SendDataToOneVsOnePage(User newUser) {
         new OneVsOne().recieveData(newUser);
     }
 
-    private void recievePlayersData()
-    {
+    private void recievePlayersData() {
         try {
             int playersNum = Integer.valueOf(fromServer.readLine());
             for (int i = 0; i < playersNum; i++) {
@@ -392,13 +384,14 @@ TextField IPTextField = new TextField();
                         closeConnectionToServer();
                     } else if (mssg.equals("invitation")) {
                         String invitingPlayerUserName = fromServer.readLine();
+                        String invitingPlayerScore = fromServer.readLine();
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setTitle("Invitation");
                                 alert.setContentText("invitation from " + invitingPlayerUserName + " player");
-                                 sendInvitedUserDatatoOneVsOnePage(invitingPlayerUserName);
+                                sendInvitedUserDatatoOneVsOnePage(invitingPlayerUserName);
                                 ButtonType accept = new ButtonType("Accept");
                                 ButtonType reject = new ButtonType("Reject");
                                 alert.getButtonTypes().setAll(accept, reject);
@@ -413,8 +406,8 @@ TextField IPTextField = new TextField();
                                     toServer.println("refused");
                                 }
                             }
-                               private void sendInvitedUserDatatoOneVsOnePage(String invitingPlayerUserName)
-                            {
+
+                            private void sendInvitedUserDatatoOneVsOnePage(String invitingPlayerUserName) {
                                 new OneVsOne().recieveInvitedUserData(invitingPlayerUserName);
                                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                             }
@@ -457,29 +450,22 @@ TextField IPTextField = new TextField();
                         SendAllInfoToGamePage(s, toServer, fromServer, playersList);
                         controller = loader.getController();
                         controller.SetCurrentUserInfo(currentUser.userName, currentUser.score);
-                    } 
-                    else if(mssg.equals("resume"))
-                    {
+                    } else if (mssg.equals("resume")) {
                         String savedGrid = fromServer.readLine();
                         String lastMark = fromServer.readLine();
                         new OneVsOne().resumeMatch(savedGrid, lastMark);
-                    }
-                    else if (mssg.equals("win")) {
+                    } else if (mssg.equals("win")) {
                         System.out.println("YOU WON YA BASHAAA");
                         new OneVsOne().showResult("YOU WON YA BASHAAA");
-                    } 
-                    else if (mssg.equals("lose")) {
+                    } else if (mssg.equals("lose")) {
                         System.out.println("You lost ");
                         new OneVsOne().showResult("You lost ");
 
-                    }
-                    else if ( mssg.contains("chat")) {
+                    } else if (mssg.contains("chat")) {
                         System.out.println("recieved f tictactoe");
                         new OneVsOne().chatAppend(mssg);//the function that append to chat}
 
-                    }
-                    
-                    else if (isNumeric(mssg)) {
+                    } else if (isNumeric(mssg)) {
                         System.out.println("movement received");
                         new OneVsOne().setMark(Integer.valueOf(mssg));
                     } else {

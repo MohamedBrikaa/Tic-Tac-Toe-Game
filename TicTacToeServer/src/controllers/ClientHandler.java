@@ -185,6 +185,7 @@ public class ClientHandler extends Thread {
         ClientHandler invitedClient = onlinePlayers.get(onlinePlayersUNames.indexOf(userName));
         invitedClient.ps.println("invitation");
         invitedClient.ps.println(this.user.userName);
+        invitedClient.ps.println(this.user.score);
 
         try {
             this.sleep(500);
