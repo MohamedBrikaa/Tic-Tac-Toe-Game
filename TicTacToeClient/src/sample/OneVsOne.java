@@ -56,6 +56,7 @@ public class OneVsOne implements Initializable {
     Button R2;
     @FXML
     Button R3;
+     @FXML TextField chatTextField;
     static Stage primaryStage;
     static GridPane grid;
     static Scene scene;
@@ -285,18 +286,21 @@ public class OneVsOne implements Initializable {
         gameover = true;
     }
 
-    void chatAppend(String mssg) {
+    void chatAppend(String mssg)
+    {
+        mssg=mssg.substring(4);
+        mssg+='\n';
         System.out.println("appending chat");
         System.out.println(chatAREA);
         chatAREA.appendText(mssg);
     }
-
     public void sendChat(ActionEvent actionEvent) {
-
-        chatText = chatArea.getText();
-        chatText = "chat " + chatText;
+        
+        chatText= chatTextField.getText();
+        chatText="chat "+chatText;
         toServer.println(chatText);
         System.out.println("send chat to server" + chatText);
-
+      
     }
+
 }
