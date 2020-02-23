@@ -43,7 +43,6 @@ public class Controller implements Initializable {
     static Scene scene;
     static Stage stage;
     static User invitedUser;
-      static User invitedUser;
     static String invitedUserName;
      static Integer invitedUserScore;
     @FXML
