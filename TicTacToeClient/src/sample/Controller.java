@@ -33,7 +33,7 @@ import javafx.application.Platform;
 import static sample.TicTacToeClient.playersList;
 
 public class Controller implements Initializable {
-
+    
     static Socket socket;
     static BufferedReader fromServer;
     static PrintWriter toServer;
@@ -52,16 +52,16 @@ public class Controller implements Initializable {
     @FXML
     Button playWithComputer;
     private Callback tableViewRowFactory;
-
+    
     @FXML
-
+    
     public void playWithComputer(javafx.event.ActionEvent actionEvent) {
-
+        
         FXMLLoader("playWithComp.fxml");
         System.out.println("play with computer");
-
+        
     }
-
+    
     public void inviteFriend(javafx.event.ActionEvent actionEvent) {
         System.out.println("Invite a friend");
         System.out.println(socket);
@@ -74,7 +74,7 @@ public class Controller implements Initializable {
 //            mssg = fromServer.readLine();
 //            System.out.println(mssg);
         System.out.println("invitation Response");
-       
+
 //            if (mssg.equals("invitationAccepted")) {
 //                Platform.runLater(new Runnable() {
 //                    @Override
@@ -91,9 +91,9 @@ public class Controller implements Initializable {
 //        }
         // FXMLLoader("OneVsOne.fxml");
     }
-
+    
     public void FXMLLoader(String fxmlName) {
-
+        
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlName));
             Parent root1 = (Parent) fxmlLoader.load();
@@ -102,13 +102,13 @@ public class Controller implements Initializable {
             stage.initStyle(StageStyle.DECORATED);
             stage.setScene(new Scene(root1, 556, 630));
             stage.show();
-
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
     }
-
+    
     static String user;
     static Integer score;
 
@@ -124,58 +124,63 @@ public class Controller implements Initializable {
     }
     @FXML
     TableView tableView;
-
+    
     public void recieveSocket(Socket socket, PrintWriter toServer, BufferedReader fromServer, Vector<User> playerList) {
         this.toServer = toServer;
         this.socket = socket;
         this.fromServer = fromServer;
         this.playerList = playerList;
-
+        
         System.out.println(playerList.get(0).userName);
         System.out.println(playerList.get(1).userName);
-
+        
     }
-
+    
     public void back(MouseEvent mouseEvent) {
-
+        
         LoadLoginPage(primaryStage, grid, scene);
-
+        
     }
-
+    
     public void LoadLoginPage(Stage primaryStage, GridPane grid, Scene scene) {
         this.grid = grid;
         this.primaryStage = primaryStage;
         this.scene = scene;
-
+        
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
+    
     public void SetCurrentUserInfo(String name, Integer score) {
         myName.setText(name);
         myScore.setText(String.valueOf(score));
+        tableView.getItems().clear();
         ObservableList<User> data = tableView.getItems();
-
+        
         for (int i = 0; i < playerList.size(); i++) {
-            System.out.println(playerList.get(i).userName+" "+playerList.get(i).state);
+            System.out.println(playerList.get(i).userName + " " + playerList.get(i).state);
             data.add(new User(playerList.get(i).userID, playerList.get(i).userName, playerList.get(i).email, playerList.get(i).state, playerList.get(i).score));
         }
-
+        
     }
-
+    
     public void setData() {
         invitedUser = (User) tableView.getSelectionModel().getSelectedItem();
-
+        
     }
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        
     }
-
+    
     public void show(MouseEvent mouseEvent) {
         invitedUser = (User) tableView.getSelectionModel().getSelectedItem();
         // System.out.println(invitedUser.userName);
 
+    }
+    
+    void emptyTable() {
+        
     }
 }
