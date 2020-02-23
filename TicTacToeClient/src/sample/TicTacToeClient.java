@@ -1,5 +1,5 @@
 package sample;
-
+import java.util.regex.Pattern;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -54,14 +54,6 @@ public class TicTacToeClient extends Application {
     Controller controller = loader.getController();
 
     public void init() {
-
-        try {
-            this.s = new Socket("127.0.0.1", 20080);
-            this.toServer = new PrintWriter(s.getOutputStream(), true);
-            this.fromServer = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
@@ -122,7 +114,43 @@ public class TicTacToeClient extends Application {
         grid.add(EmailTextField, 1, 8);
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 10);
+TextField IPTextField = new TextField();
+        grid.add(IPTextField, 0, 24);
+        Button connectBtn = new Button("Connect");
+        grid.add(connectBtn, 0, 25);
+        
+        
+        final Text signActiontarget = new Text();
+        grid.add(signActiontarget, 1, 10);
+        final Text sigupNameInstruction = new Text();
+        grid.add(sigupNameInstruction, 0, 11);
+        sigupNameInstruction.setText("* Name: 2 fields, starts with CAPITAL LETTERS");
+        final Text sigupPassInstruction = new Text();
+        sigupPassInstruction.setFill(Color.BLACK);
+        sigupNameInstruction.setFill(Color.BLACK);
+        grid.add(sigupPassInstruction, 0, 12);
+        sigupPassInstruction.setFont(Font.font("Tahoma", FontWeight.THIN, 12));
+        sigupNameInstruction.setFont(Font.font("Tahoma", FontWeight.THIN, 12));
+        sigupPassInstruction.setText("* Password: [4-8] Numbers & contains shape ");
 
+        connectBtn.setOnAction(new EventHandler<ActionEvent>()
+        {
+
+            @Override
+            public void handle(ActionEvent event)
+            {
+                String IP = IPTextField.getText();
+                try {
+                    s = new Socket(IP, 20080);
+                    toServer = new PrintWriter(s.getOutputStream(), true);
+                    fromServer = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
+                    // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                } catch (IOException ex) {
+                    Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        });
         btn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -156,9 +184,11 @@ public class TicTacToeClient extends Application {
         final Text signUpActiontarget = new Text();
         grid.add(signUpActiontarget, 1, 11);
 
-        Signupbtn.setOnAction(new EventHandler<ActionEvent>() {
+        Signupbtn.setOnAction(new EventHandler<ActionEvent>()
+        {
             @Override
-            public void handle(ActionEvent e) {
+            public void handle(ActionEvent e)
+            {
 
                 String name = SignUp_nameTextField.getText();
                 String Pass = SignUp_enterPwBox.getText();
@@ -166,30 +196,71 @@ public class TicTacToeClient extends Application {
                 System.out.println(name);
                 System.out.println(Pass);
                 System.out.println(Email);
-                toServer.println("signup");
-                toServer.println(name);
-                toServer.println(Pass);
-                toServer.println(Email);
+                String error = "";
+                String regexName = "\\p{Upper}(\\p{Lower}+\\s?)";
+                String patternName = "(" + regexName + "){2,3}";
+                System.out.println("The name is: " + name);
+                System.out.println("Is the above name valid? " + name.matches(patternName));
+                boolean nameResult = name.matches(patternName);
+                String regexEmail = "^(.+)@(.+)$";
+                Pattern patternEmail = Pattern.compile(regexEmail);
+                System.out.println("Is the above Email valid? " + Email.matches(String.valueOf(patternEmail)));
+                boolean EmailResult = Email.matches(String.valueOf(patternEmail));
+                String regexPass = "((?=.*\\d)(?=.*[@#$%!]).{5,40})";
+                Pattern patternPass = Pattern.compile(regexPass);
+                System.out.println("Is the above Pass valid? " + Pass.matches(String.valueOf(patternPass)));
+                boolean passResult = Pass.matches(String.valueOf(patternPass));
 
-                try {
-                    mssg = fromServer.readLine();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
+                if (name.equals("") || Pass.equals("") || Email.equals("")) {
+                    error = "Please Fill All Inputs\n";
+                    signActiontarget.setText(error);
                 }
-                if (mssg.equals("signupDone")) {
+                if (nameResult == false) {
 
-                    System.out.println("Sign up Done");
-                    signUpActiontarget.setFill(Color.FIREBRICK);
-                    signUpActiontarget.setText("Signed up successfully, Please Login");
+                    error += "Please Enter Valid Name\n";
+                    signActiontarget.setText(error);
+                }
+                if (EmailResult == false) {
+                    error += "Please Enter Valid Email\n";
+                    signActiontarget.setText(error);
+                }
+                if (passResult == false) {
+                    error += "Please Enter Valid Password\n";
+                    signActiontarget.setText(error);
+                } else {
+                    toServer.println("signup");
+                    toServer.println(name);
+                    toServer.println(Pass);
+                    toServer.println(Email);
 
-                } else if (mssg.equals("signupFailed")) {
+                    try {
+                        mssg = fromServer.readLine();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    Platform.runLater(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            if (mssg.equals("signupDone")) {
 
-                    System.out.println("Sign up Failed Please try again");
-                    signUpActiontarget.setFill(Color.FIREBRICK);
-                    signUpActiontarget.setText("Sign up Failed Please try again");
+                                System.out.println("Sign up Done");
+                                signActiontarget.setFill(Color.FIREBRICK);
+                                signActiontarget.setText("Signed up successfully, Please Login");
+
+                            } else if (mssg.equals("signupFailed")) {
+
+                                System.out.println("Sign up Failed Please try again");
+                                signActiontarget.setFill(Color.FIREBRICK);
+                                signActiontarget.setText("Sign up Failed Please try again");
+
+                            }
+
+                        }
+                    });
 
                 }
-
             }
         });
 
@@ -263,6 +334,24 @@ public class TicTacToeClient extends Application {
     private void SendAllInfoToGamePage(Socket socket, PrintWriter toServer, BufferedReader fromServer, Vector<User> playerList) {
         new Controller().recieveSocket(socket, toServer, fromServer, playerList);
     }
+      private void SendDataToOneVsOnePage(User newUser)
+    {
+        new OneVsOne().recieveData(newUser);
+    }
+
+    private void recievePlayersData()
+    {
+        try {
+            int playersNum = Integer.valueOf(fromServer.readLine());
+            for (int i = 0; i < playersNum; i++) {
+                playersList.add(receiveUserInfo());
+                printUserData(playersList.get(i));
+            }
+            SendAllInfoToGamePage(s, toServer, fromServer, playersList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -307,6 +396,7 @@ public class TicTacToeClient extends Application {
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setTitle("Invitation");
                                 alert.setContentText("invitation from " + invitingPlayerUserName + " player");
+                                 sendInvitedUserDatatoOneVsOnePage(invitingPlayerUserName);
                                 ButtonType accept = new ButtonType("Accept");
                                 ButtonType reject = new ButtonType("Reject");
                                 alert.getButtonTypes().setAll(accept, reject);
@@ -320,6 +410,11 @@ public class TicTacToeClient extends Application {
                                 } else {
                                     toServer.println("refused");
                                 }
+                            }
+                               private void sendInvitedUserDatatoOneVsOnePage(String invitingPlayerUserName)
+                            {
+                                new OneVsOne().recieveInvitedUserData(invitingPlayerUserName);
+                                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                             }
                         });
 
