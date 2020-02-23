@@ -1,17 +1,13 @@
 package controllers;
 
-import com.mysql.jdbc.Buffer;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import models.*;
 import views.*;
 
@@ -21,6 +17,7 @@ public class ClientHandler extends Thread {
     PrintWriter ps;
     Socket s;
     User user;
+    boolean serverOn;
     static Vector<User> playersList = new Vector<>();
     static Vector<String> onlinePlayersUNames = new Vector<>();
     static Vector<ClientHandler> onlinePlayers = new Vector<>();
@@ -36,6 +33,7 @@ public class ClientHandler extends Thread {
             this.s = s;
             dis = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
             ps = new PrintWriter(s.getOutputStream(), true);
+            serverOn=true;
             System.out.println("new socket for player connected and new handler initated");
             start();
         } catch (IOException ex) {
@@ -47,7 +45,7 @@ public class ClientHandler extends Thread {
     public void run() {
         String mssg;
         int i = 0;
-        while (true) {
+        while (serverOn) {
             try {
                 System.out.println("waiting for new message");
                 mssg = dis.readLine();
@@ -73,7 +71,7 @@ public class ClientHandler extends Thread {
                     sendUpdatetoAllClients("logout");
                     closePlayerConnection(this, "OFFLINE");
 
-                }else if (isNumeric(mssg)||mssg.contains("chat")||mssg.equals("pause")) {                    //send movement
+                } else if (isNumeric(mssg) || mssg.contains("chat") || mssg.equals("pause")) {                    //send movement
                     System.out.println("Play Movement");
                     gameMatches.get(gameIndex).sendNewMove(mssg);
                 } else if (mssg.equals("accept") || mssg.equals("refused")) {
@@ -204,10 +202,10 @@ public class ClientHandler extends Thread {
             //recive accept
             this.ps.println("invitationAccepted");
             try {
-            this.sleep(500);
-             } catch (InterruptedException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-             }
+                this.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
             gameMatches.add(new GameMatch(this.user.userName, userName, this.s, invitedClient.s));
             this.gameIndex = gameMatches.size() - 1;
             invitedClient.gameIndex = gameMatches.size() - 1;
@@ -221,7 +219,7 @@ public class ClientHandler extends Thread {
     private User getUserInfo(String userName) {
         return UserModel.playerInfo(userName);
     }
-    
+
     public void sendUserInfo(PrintWriter ps, User user) {
         ps.println(user.userID);
         ps.println(user.userName);
@@ -233,10 +231,11 @@ public class ClientHandler extends Thread {
     public void refreshPlayersList() {
         playersList = UserModel.returnAllPlayers();
     }
-    
+
     public static void closeAllInternalSockets() {
         for (ClientHandler player : onlinePlayers) {
             player.ps.println("serveroff");
+            player.serverOn=false;
             closePlayerConnection(player, "OFFLINE");
             try {
                 player.s.close();
