@@ -50,7 +50,7 @@ public class UserModel {
        try {
            Connection connection = connect();
            Statement statement = (Statement) connection.createStatement();
-           ResultSet resultSet=statement.executeQuery("SELECT * FROM users");
+           ResultSet resultSet=statement.executeQuery("SELECT * FROM users order by Points DESC");
            boolean playerNameFound=false,correctPassword=false;
            while(resultSet.next()){
                
