@@ -163,6 +163,11 @@
             <Font name="4 Star Face Font" size="33.0" />
          </font>
       </Label>
+      <Label fx:id="winLabel" layoutX="169.0" layoutY="550" prefHeight="38.0" prefWidth="162.0" text="" textFill="WHITE">
+         <font>
+            <Font name="4 Star Face Font" size="24.0" />
+         </font>
+      </Label>
       <ImageView fx:id="backBtn" fitHeight="64.0" fitWidth="67.0" layoutX="14.0" layoutY="558.0" onMouseClicked="#back" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@back.png" />

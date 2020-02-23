@@ -48,6 +48,8 @@ public class GameController implements Initializable {
     Button R3;
     @FXML
     Label level;
+    @FXML
+    Label winLabel;
 
     Button[][] board;
 
@@ -101,6 +103,7 @@ public class GameController implements Initializable {
         gameOver = false;
         gameLevel = "unknown";
         lvl.setText("Please Choose Level");
+        winLabel.setText("");
     }
 
     public void playerPlay(Button btnPressed) {
@@ -179,7 +182,7 @@ public class GameController implements Initializable {
         if (gameLevel.equals("unknown")) {
             System.out.println("You choose Easy");
             gameLevel = "easy";
-            lvl.setText(gameLevel);
+            lvl.setText(gameLevel.toUpperCase());
         }
     }
 
@@ -187,7 +190,7 @@ public class GameController implements Initializable {
         if (gameLevel.equals("unknown")) {
             System.out.println("You choose Hard");
             gameLevel = "hard";
-            lvl.setText(gameLevel);
+            lvl.setText(gameLevel.toUpperCase());
         }
     }
 
@@ -195,10 +198,12 @@ public class GameController implements Initializable {
         int result = evaluate(board);
         if (result == 10) {
             System.out.println("Player O Wins");
+            winLabel.setText("Player O Wins");
             gameOver = true;
         } else if (result == -10) {
             System.out.println("Player X Wins");
             gameOver = true;
+            winLabel.setText("Player X Wins");
         }
 
         if (!isMovesLeft(board)) {
