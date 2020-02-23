@@ -34,9 +34,12 @@ public class OneVsOne implements Initializable {
     static String opponentMark;
     static Button boards[][] = new Button[3][3];
     static String chatText;
-  @FXML Label name1,name2,score1,score2,whoseTurnLabel;
-  @FXML TextArea chatArea;
-  @FXML Button L1;
+    @FXML
+    Label name1, name2, score1, score2, whoseTurnLabel;
+    @FXML
+    TextArea chatArea;
+    @FXML
+    Button L1;
     @FXML
     Button L2;
     @FXML
@@ -59,8 +62,7 @@ public class OneVsOne implements Initializable {
     static Stage stage;
     static TextArea chatAREA;
     static Label whoseTURNLABEL;
-    static boolean gameover=false;
-  
+    static boolean gameover = false;
 
     public void setL1() {
         Button btnPressed = boards[0][0];
@@ -158,11 +160,16 @@ public class OneVsOne implements Initializable {
         }
     }
 
+    public void solve() {
+        System.out.println("from solve " + boards[0][0]);
+
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        chatAREA=chatArea;
-        whoseTURNLABEL=whoseTurnLabel;
-       
+        chatAREA = chatArea;
+        whoseTURNLABEL = whoseTurnLabel;
+
         boards[0][0] = L1;
         boards[1][0] = L2;
         boards[2][0] = L3;
@@ -176,10 +183,9 @@ public class OneVsOne implements Initializable {
         score1.setText(String.valueOf(score));
         name2.setText(invitedUserName);
         score2.setText(String.valueOf(invitedUserScore));
-                
+
     }
-    
-   
+
     public void setChat(String mssg) {
         System.out.println(mssg);
     }
@@ -188,8 +194,9 @@ public class OneVsOne implements Initializable {
         System.out.println("pause");
         toServer.println("pause");
     }
+
     private void sendMove(Button btnPressed, int index) {
-        
+
         if (!(btnPressed.getText().equals("O") || btnPressed.getText().equals("X")) && myTurn && !gameover) {
             {
                 myTurn = false;
@@ -201,7 +208,7 @@ public class OneVsOne implements Initializable {
     }
 
     private void updateGUI(Button updatedBtn) {
-  
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -213,9 +220,8 @@ public class OneVsOne implements Initializable {
     }
     static String user;
     static Integer score;
-    
-    String recieveData(User myData)
-    {       
+
+    String recieveData(User myData) {
         // myList.add(usr);
         System.out.println(myData.userName);
         user = myData.userName;
@@ -225,34 +231,45 @@ public class OneVsOne implements Initializable {
         return user;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
- static String invitedUserName;
- static Integer invitedUserScore;
- 
-    void recieveInvitedUserData(User invitedUser)
-    {
-        invitedUserName=invitedUser.userName;
-        invitedUserScore=invitedUser.score;
+    static String invitedUserName;
+    static Integer invitedUserScore;
+
+    void recieveInvitedUserData(User invitedUser) {
+        invitedUserName = invitedUser.userName;
+        invitedUserScore = invitedUser.score;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
     
-    
-    void resumeMatch(String gridFromServer, String playerTurn){
-        for(int i=0;i<3;i++){
-            for(int j=0;j<3;j++){
-                boards[j][i].setText(Character.toString(gridFromServer.charAt(i+(3*j))));
+    void resumeMatch(String gridFromServer, String playerTurn) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                setBtn(boards[j][i], Character.toString(gridFromServer.charAt(i + (3 * j))));
             }
         }
-        
-        
-        if(playerTurn.equals(myMark)){
-            myTurn=true;
+
+        if (playerTurn.equals(myMark)) {
+            myTurn = true;
+        } else {
+            myTurn = false;
         }
-        else myTurn=false;
-    
+
     }
-    public void showResult(String result){
-        
+
+    public void setBtn(Button btn, String mark) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if ("-".equals(mark)) {
+                    btn.setText("");
+                } else {
+                    btn.setText(mark);
+                }
+            }
+        });
+    }
+
+    public void showResult(String result) {
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -260,25 +277,22 @@ public class OneVsOne implements Initializable {
 
             }
         });
-        
-        gameover=true;
+
+        gameover = true;
     }
 
-    void chatAppend(String mssg)
-    {
+    void chatAppend(String mssg) {
         System.out.println("appending chat");
         System.out.println(chatAREA);
         chatAREA.appendText(mssg);
     }
+
     public void sendChat(ActionEvent actionEvent) {
-        
-        chatText= chatArea.getText();
-        chatText="chat "+chatText;
+
+        chatText = chatArea.getText();
+        chatText = "chat " + chatText;
         toServer.println(chatText);
         System.out.println("send chat to server" + chatText);
-        
-        
-        
-       
+
     }
 }
