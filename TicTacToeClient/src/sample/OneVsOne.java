@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import static sample.Controller.invitedUser;
@@ -56,7 +57,7 @@ public class OneVsOne implements Initializable {
     Button R2;
     @FXML
     Button R3;
-     @FXML TextField chatTextField;
+    @FXML TextField chatTextField;
     static Stage primaryStage;
     static GridPane grid;
     static Scene scene;
@@ -146,6 +147,7 @@ public class OneVsOne implements Initializable {
             updateGUI(boards[2][2]);
 
         }
+        setTurnLabel();
 
     }
 
@@ -159,6 +161,7 @@ public class OneVsOne implements Initializable {
             myTurn = false;
             this.opponentMark = "X";
         }
+        
     }
 
     public void solve() {
@@ -170,7 +173,7 @@ public class OneVsOne implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         chatAREA = chatArea;
         whoseTURNLABEL = whoseTurnLabel;
-
+        gameover = false;
         boards[0][0] = L1;
         boards[1][0] = L2;
         boards[2][0] = L3;
@@ -184,7 +187,8 @@ public class OneVsOne implements Initializable {
         score1.setText(String.valueOf(score));
         name2.setText(invitedUserName);
         score2.setText(String.valueOf(invitedUserScore));
-
+        setTurnLabel();
+        
     }
 
     public void setChat(String mssg) {
@@ -204,7 +208,9 @@ public class OneVsOne implements Initializable {
                 btnPressed.setText(myMark);
                 btnPressed.disableProperty();
                 toServer.println(index);
+                
             }
+            setTurnLabel();
         }
     }
 
@@ -221,6 +227,25 @@ public class OneVsOne implements Initializable {
     }
     static String user;
     static Integer score;
+    
+    void setTurnLabel(){
+        String text="Your Turn";
+        if(myTurn==false)text="Not your turn";
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                if(myTurn==true){
+                    whoseTURNLABEL.setText("Your Turn");
+                }
+                else{
+                     whoseTURNLABEL.setText("Not your Turn");
+                }
+                
+
+            }
+        });
+
+    }
 
     String recieveData(User myData) {
         // myList.add(usr);
@@ -257,6 +282,7 @@ public class OneVsOne implements Initializable {
         } else {
             myTurn = false;
         }
+        setTurnLabel();
 
     }
 

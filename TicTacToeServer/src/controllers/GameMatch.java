@@ -108,7 +108,7 @@ public class GameMatch {
                 System.out.println("");
                 ps[(playerNumber+1)%2].println(msg);
                 
-                if(checkGrid()){
+                if( checkGrid() ){
                  UserModel.updatePlayerScore(users[playerNumber], 5);
                  ps[playerNumber].println("win");
                  ps[(playerNumber+1)%2].println("lose");
