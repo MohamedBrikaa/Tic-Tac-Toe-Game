@@ -325,6 +325,7 @@ public class OneVsOne implements Initializable {
         chatText= chatTextField.getText();
         chatText="chat "+chatText;
         toServer.println(chatText);
+         chatTextField.setText("");
         System.out.println("send chat to server" + chatText);
       
     }
