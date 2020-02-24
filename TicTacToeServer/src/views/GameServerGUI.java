@@ -145,6 +145,7 @@ public class GameServerGUI extends Application {
             @Override
             public void handle(ActionEvent e) {
                 socketServerThread.stop();
+//                ClientHandler.closeAllInternalSockets();
                 System.out.println("close Server");
             }
         });

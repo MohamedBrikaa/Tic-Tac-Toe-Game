@@ -37,6 +37,7 @@ import java.util.Optional;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert.AlertType;
 import org.controlsfx.control.Notifications;
 
 public class TicTacToeClient extends Application {
@@ -47,7 +48,7 @@ public class TicTacToeClient extends Application {
     PrintWriter toServer = null;
     BufferedReader fromServer;
     String mssg;
-    int flag=0;
+    int flag = 0;
     static Vector<User> playersList = new Vector<>();
     User currentUser;
     boolean loggedIn = false;
@@ -55,7 +56,7 @@ public class TicTacToeClient extends Application {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
 
     Controller controller = loader.getController();
-
+    ClientListner listner;
     public void init() {
 
     }
@@ -77,15 +78,15 @@ public class TicTacToeClient extends Application {
         grid.add(scenetitle, 0, 0, 2, 2);
 
         Label userName = new Label("User Name:");
-     
+
         grid.add(userName, 0, 5);
-userName.setTextFill(Color.WHITE);
+        userName.setTextFill(Color.WHITE);
         TextField userTextField = new TextField();
         grid.add(userTextField, 1, 5);
 
         Label pw = new Label("Password:");
         grid.add(pw, 0, 7);
-pw.setTextFill(Color.WHITE);
+        pw.setTextFill(Color.WHITE);
         PasswordField pwBox = new PasswordField();
         grid.add(pwBox, 1, 7);
 
@@ -101,22 +102,22 @@ pw.setTextFill(Color.WHITE);
         grid.add(HsignUpBtn, 1, 13);
 
         Label SignUp_name = new Label("User Name:");
-        SignUp_name .setTextFill(Color.WHITE);
+        SignUp_name.setTextFill(Color.WHITE);
         grid.add(SignUp_name, 0, 10);
 
         TextField SignUp_nameTextField = new TextField();
         grid.add(SignUp_nameTextField, 1, 10);
 
         Label SignUp_enterPw = new Label("Enter Password:");
-        SignUp_enterPw .setTextFill(Color.WHITE);
+        SignUp_enterPw.setTextFill(Color.WHITE);
         grid.add(SignUp_enterPw, 0, 11);
 
         PasswordField SignUp_enterPwBox = new PasswordField();
-    
+
         grid.add(SignUp_enterPwBox, 1, 11);
 
         Label Email = new Label("Email:");
-        Email .setTextFill(Color.WHITE);
+        Email.setTextFill(Color.WHITE);
         grid.add(Email, 0, 12);
 
         TextField EmailTextField = new TextField();
@@ -129,18 +130,18 @@ pw.setTextFill(Color.WHITE);
         HConnectBtn.setAlignment(Pos.BOTTOM_RIGHT);
         HConnectBtn.getChildren().add(connectBtn);
         grid.add(HConnectBtn, 0, 29);
-               HBox IP = new HBox(10);
+        HBox IP = new HBox(10);
         IP.setAlignment(Pos.BOTTOM_RIGHT);
         IP.getChildren().add(IPTextField);
         grid.add(IP, 1, 29);
 
         final Text signActiontarget = new Text();
         signActiontarget.setFill(Color.YELLOW);
-        grid.add(signActiontarget,1, 2);
+        grid.add(signActiontarget, 1, 2);
         final Text sigupNameInstruction = new Text();
         grid.add(sigupNameInstruction, 0, 14);
         sigupNameInstruction.setText("* Name: 2 fields, starts with CAPITAL LETTERS");
-                final Text connectInstruction = new Text();
+        final Text connectInstruction = new Text();
         grid.add(connectInstruction, 0, 16);
         connectInstruction.setText("*YOU HAVE TO CONNECT TO SERVER FIRST");
         final Text sigupPassInstruction = new Text();
@@ -151,26 +152,26 @@ pw.setTextFill(Color.WHITE);
         sigupPassInstruction.setFont(Font.font("Tahoma", FontWeight.THIN, 12));
         sigupNameInstruction.setFont(Font.font("Tahoma", FontWeight.THIN, 12));
         sigupPassInstruction.setText("* Password: [4-8] Numbers & contains shape ");
-  IPTextField.setText("127.0.0.1");
+        IPTextField.setText("127.0.0.1");
 
         connectBtn.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-               
+
                 String IP = IPTextField.getText();
-                flag=1;
+                flag = 1;
                 try {
                     s = new Socket(IP, 20080);
                     toServer = new PrintWriter(s.getOutputStream(), true);
                     fromServer = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
-                    
+
                     // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 } catch (IOException ex) {
                     signActiontarget.setText("Please Check Your Connection");
                     //Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
         });
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -179,32 +180,33 @@ pw.setTextFill(Color.WHITE);
             public void handle(ActionEvent e) {
                 String user = userTextField.getText();
                 String Password = pwBox.getText();
-try {
-    if(flag==1)
-    {  User usr = new User();
-                toServer.println("login");
-                toServer.println(user);
-                toServer.println(Password);
-                
-                    mssg = fromServer.readLine();
-                    if (mssg.equals("loginDone")) {
-                        handleLoginOpeartionWithServer();
-                        primaryStage.setScene(new Scene(root, 720, 700));
-                        Controller controller = loader.getController();
-                        controller.SetCurrentUserInfo(currentUser.userName, currentUser.score);
-                        ClientListner listner = new ClientListner();
-                        listner.start();
-                        primaryStage.show();
-                    } else if (mssg.equals("loginFailed")) {
-                        signActiontarget.setText("login Failed Please try again");
-                        System.out.println("login Failed Please try again");
-                        
+                try {
+                    if (flag == 1) {
+                        User usr = new User();
+                        toServer.println("login");
+                        toServer.println(user);
+                        toServer.println(Password);
+
+                        mssg = fromServer.readLine();
+                        if (mssg.equals("loginDone")) {
+                            handleLoginOpeartionWithServer();
+                            primaryStage.setScene(new Scene(root, 720, 700));
+                            Controller controller = loader.getController();
+                            controller.SetCurrentUserInfo(currentUser.userName, currentUser.score);
+                            listner = new ClientListner();
+                            listner.start();
+                            primaryStage.show();
+                        } else if (mssg.equals("loginFailed")) {
+                            signActiontarget.setText("login Failed Please try again");
+                            System.out.println("login Failed Please try again");
+                            
+                        }
+                    } else {
+                        signActiontarget.setText("Please Connect First then login");
                     }
-    }
-    else{ signActiontarget.setText("Please Connect First then login");}
                 } catch (IOException ex) {
                     signActiontarget.setText("Please Connect First then login");
-                   // Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
+                    // Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -253,7 +255,8 @@ try {
                 if (passResult == false) {
                     error += "Please Enter Valid Password\n";
                     signActiontarget.setText(error);
-                } else { signActiontarget.setText("");
+                } else {
+                    signActiontarget.setText("");
                     toServer.println("signup");
                     toServer.println(name);
                     toServer.println(Pass);
@@ -335,6 +338,7 @@ try {
     @Override
     public void stop() {
         toServer.println("logout");
+        listner.stop();
         closeConnectionToServer();
     }
 
@@ -344,6 +348,7 @@ try {
             toServer.close();
             s.close();
             super.stop();
+            Platform.exit();
         } catch (IOException ex) {
             Logger.getLogger(TicTacToeClient.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
@@ -410,7 +415,19 @@ try {
                     System.out.println(mssg);
                     if (mssg.equals("serveroff")) {
                         isServerOn = false;
-                        closeConnectionToServer();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                Alert alert = new Alert(AlertType.INFORMATION);
+                                alert.setTitle("Information Dialog");
+                                alert.setHeaderText("Server has turnde off");
+                                alert.setContentText(" press OK to close the game");
+                                alert.showAndWait();
+                                System.out.println("after wait");
+                                toServer.println("logout");
+                                closeConnectionToServer();
+                            }
+                        });
                     } else if (mssg.equals("invitation")) {
                         String invitingPlayerUserName = fromServer.readLine();
                         String invitingPlayerScore = fromServer.readLine();
@@ -420,11 +437,11 @@ try {
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setTitle("Invitation");
                                 alert.setContentText("invitation from " + invitingPlayerUserName + " player");
-                                sendInvitedUserDatatoOneVsOnePage(invitingPlayerUserName,invitingPlayerScore );
+                                sendInvitedUserDatatoOneVsOnePage(invitingPlayerUserName, invitingPlayerScore);
                                 ButtonType accept = new ButtonType("Accept");
                                 ButtonType reject = new ButtonType("Reject");
                                 alert.getButtonTypes().setAll(accept, reject);
-//                                alert.show();
+                                
                                 Optional<ButtonType> result = alert.showAndWait();
                                 if (result.get() == accept) {
                                     toServer.println("accept");
@@ -435,9 +452,9 @@ try {
                                     toServer.println("refused");
                                 }
                             }
-
-                            private void sendInvitedUserDatatoOneVsOnePage(String invitingPlayerUserName,String invitingPlayerScore ) {
-                                new OneVsOne().recieveInvitedUserData(invitingPlayerUserName,invitingPlayerScore);
+                            
+                            private void sendInvitedUserDatatoOneVsOnePage(String invitingPlayerUserName, String invitingPlayerScore) {
+//                                new OneVsOne().recieveInvitedUserData(invitingPlayerUserName,invitingPlayerScore);
                                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                             }
                         });

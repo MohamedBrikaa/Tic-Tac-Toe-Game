@@ -6,6 +6,7 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,14 +15,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="642.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.OneVsOne">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="719.0" prefWidth="995.0" style="-fx-background-color: #2f2f2f;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.OneVsOne">
    <children>
-      <ImageView fitHeight="663.0" fitWidth="614.0" layoutX="-21.0" layoutY="-21.0">
+      <ImageView fitHeight="725.0" fitWidth="856.0" layoutX="6.0" layoutY="-24.0">
          <image>
             <Image url="@onevsone.jpg" />
          </image>
       </ImageView>
-      <Text layoutX="125.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="One Vs One " wrappingWidth="370.13671875">
+      <TextField fx:id="chatTextField" layoutX="744.0" layoutY="519.0" prefHeight="50.0" prefWidth="194.0" style="-fx-background-color: Orange;" />
+      <Text layoutX="229.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="One Vs One " wrappingWidth="370.13671875">
          <font>
             <Font name="Bonzai Regular" size="67.0" />
          </font>
@@ -34,111 +36,135 @@
             </LinearGradient>
          </fill>
       </Text>
-      <AnchorPane fx:id="oneVsOneAnchor" layoutX="123.0" layoutY="125.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="326.0" style="-fx-border-color: #5d5757; -fx-border-width: 5;">
+      <AnchorPane fx:id="turnAnchorPane" layoutX="192.0" layoutY="441.0" prefHeight="56.0" prefWidth="201.0" />
+      <AnchorPane fx:id="oneVsOneAnchor" layoutX="270.0" layoutY="125.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="326.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 5;">
          <children>
             <Group layoutX="100.0" layoutY="112.0" AnchorPane.rightAnchor="227.0" />
-            <Button fx:id="L1" layoutX="10.0" layoutY="13.0" mnemonicParsing="false" onAction="#setL1" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="L1" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#setL1" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="C1" layoutX="113.0" layoutY="12.0" mnemonicParsing="false" onAction="#setC1" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="C1" layoutX="113.0" layoutY="9.0" mnemonicParsing="false" onAction="#setC1" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="R1" layoutX="217.0" layoutY="13.0" mnemonicParsing="false" onAction="#setR1" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="R1" layoutX="217.0" layoutY="10.0" mnemonicParsing="false" onAction="#setR1" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="L2" layoutX="9.0" layoutY="117.0" mnemonicParsing="false" onAction="#setL2" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="L2" layoutX="9.0" layoutY="114.0" mnemonicParsing="false" onAction="#setL2" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="C2" layoutX="113.0" layoutY="116.0" mnemonicParsing="false" onAction="#setC2" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="C2" layoutX="113.0" layoutY="113.0" mnemonicParsing="false" onAction="#setC2" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="R2" layoutX="217.0" layoutY="117.0" mnemonicParsing="false" onAction="#setR2" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="R2" layoutX="217.0" layoutY="114.0" mnemonicParsing="false" onAction="#setR2" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="L3" layoutX="10.0" layoutY="219.0" mnemonicParsing="false" onAction="#setL3" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="L3" layoutX="10.0" layoutY="216.0" mnemonicParsing="false" onAction="#setL3" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="C3" layoutX="113.0" layoutY="219.0" mnemonicParsing="false" onAction="#setC3" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="C3" layoutX="113.0" layoutY="216.0" mnemonicParsing="false" onAction="#setC3" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
-            <Button fx:id="R3" layoutX="217.0" layoutY="220.0" mnemonicParsing="false" onAction="#setR3" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #5d5757; -fx-border-width: 3;" textFill="#f50808">
+            <Button fx:id="R3" layoutX="217.0" layoutY="217.0" mnemonicParsing="false" onAction="#setR3" prefHeight="99.0" prefWidth="100.0" style="-fx-border-color: #2f2f2f; -fx-border-width: 3;" textFill="#f50808">
                <font>
                   <Font name="Candara Bold" size="46.0" />
                </font></Button>
          </children>
       </AnchorPane>
-      <Text fill="#f5eded" layoutX="8.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 1" wrappingWidth="75.13671875">
+      <Text layoutX="177.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
          <font>
-            <Font size="20.0" />
+            <Font name="Book Antiqua Bold" size="21.0" />
          </font>
+         <fill>
+            <LinearGradient endX="0.2619047619047619" endY="0.6619047619047619" startX="0.29523809523809524" startY="0.16666666666666669">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="#f20707d4" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
       </Text>
-      <Text fill="WHITE" layoutX="482.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Player 2">
+      <Text layoutX="601.0" layoutY="211.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
          <font>
-            <Font size="20.0" />
+            <Font name="Book Antiqua Bold" size="21.0" />
          </font>
+         <fill>
+            <LinearGradient endX="0.2619047619047619" endY="0.6619047619047619" startX="0.29523809523809524" startY="0.16666666666666669">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="#f20707d4" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
       </Text>
-      <Text fill="#f8a407" layoutX="16.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+      <Text layoutX="603.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
          <font>
-            <Font size="15.0" />
+            <Font name="Book Antiqua Bold" size="21.0" />
          </font>
+         <fill>
+            <LinearGradient endX="0.2619047619047619" endY="0.6619047619047619" startX="0.29523809523809524" startY="0.16666666666666669">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="#f20707d4" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
       </Text>
-      <Text fill="#f8a407" layoutX="490.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+      <Text layoutX="178.0" layoutY="298.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
          <font>
-            <Font size="15.0" />
+            <Font name="Book Antiqua Bold" size="21.0" />
          </font>
+         <fill>
+            <LinearGradient endX="0.2619047619047619" endY="0.6619047619047619" startX="0.29523809523809524" startY="0.16666666666666669">
+               <stops>
+                  <Stop color="BLACK" />
+                  <Stop color="#f20707d4" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
       </Text>
-      <Text fill="#f8a407" layoutX="490.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
+      <Label fx:id="name1" layoutX="181.0" layoutY="226.0" text="Name1" textFill="#2f2f2f">
          <font>
-            <Font size="15.0" />
-         </font>
-      </Text>
-      <Text fill="#f8a407" layoutX="16.0" layoutY="259.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Score:">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Text>
-      <Label fx:id="name1" layoutX="14.0" layoutY="199.0" text="Name1" textFill="#fffdfd">
-         <font>
-            <Font size="15.0" />
+            <Font name="28 Days Later" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="score1" layoutX="15.0" layoutY="275.0" text="Score1" textFill="#fffdfd">
+      <Label fx:id="score1" layoutX="195.0" layoutY="314.0" prefHeight="24.0" prefWidth="27.0" text="Score1" textFill="#2f2f2f">
          <font>
-            <Font size="15.0" />
+            <Font name="28 Days Later" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="name2" layoutX="489.0" layoutY="199.0" text="Name2" textFill="#fffdfd">
+      <Label fx:id="name2" layoutX="604.0" layoutY="226.0" text="Name2" textFill="#2f2f2f">
          <font>
-            <Font size="15.0" />
+            <Font name="28 Days Later" size="18.0" />
          </font>
       </Label>
-      <Label fx:id="score2" layoutX="491.0" layoutY="275.0" text="Score2" textFill="#fffdfd">
+      <Label fx:id="score2" layoutX="615.0" layoutY="314.0" prefHeight="24.0" prefWidth="27.0" text="Score2" textFill="#2f2f2f">
          <font>
-            <Font size="15.0" />
+            <Font name="28 Days Later" size="20.0" />
          </font>
       </Label>
- 
-            <Label fx:id="whoseTurnLabel" layoutX="226.0" layoutY="512.0" prefHeight="37.0" prefWidth="121.0" text="Your Turn">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-
-      <TextArea fx:id="chatArea" layoutX="407.0" layoutY="511.0" prefHeight="80.0" prefWidth="179.0" />
-      <RadioButton fx:id="pauseBtn" layoutX="490.0" layoutY="24.0" mnemonicParsing="false" onAction="#pause" prefHeight="37.0" prefWidth="86.0" text="pause" textFill="#18bcdb">
+      <AnchorPane layoutX="219.0" layoutY="489.0" prefHeight="33.0" prefWidth="135.0" />
+      <TextArea fx:id="chatArea" editable="false" layoutX="744.0" layoutY="210.0" prefHeight="309.0" prefWidth="194.0" style="-fx-background-color: Orange; -fx-border-color: 9;" />
+      <Button fx:id="sendBtn" layoutX="889.0" layoutY="543.0" mnemonicParsing="false" onAction="#sendChat" prefHeight="14.0" prefWidth="49.0" style="-fx-border-color: black;" text="Send">
+         <effect>
+            <ColorAdjust brightness="-0.45" contrast="1.0" hue="-0.17" />
+         </effect></Button>
+      <RadioButton fx:id="pauseBtn" layoutX="27.0" layoutY="43.0" mnemonicParsing="false" onAction="#pause" prefHeight="37.0" prefWidth="100.0" text="pause" textFill="#18bcdb">
          <font>
-            <Font name="System Bold" size="14.0" />
+            <Font name="System Bold" size="20.0" />
          </font>
       </RadioButton>
-      <TextField fx:id="chatTextField" layoutX="408.0" layoutY="591.0" />
-      <Button fx:id="sendBtn" layoutX="543.0" layoutY="591.0" mnemonicParsing="false" onAction="#sendChat" text="Send" />
+      <Label fx:id="whoseTurnLabel" layoutX="314.0" layoutY="553.0" prefHeight="65.0" prefWidth="181.0">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>
