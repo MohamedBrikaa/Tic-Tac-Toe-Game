@@ -102,7 +102,7 @@ public class Controller implements Initializable {
             stage = new Stage();
             stage.setTitle("Let's play");
             stage.initStyle(StageStyle.DECORATED);
-            stage.setScene(new Scene(root1, 556, 630));
+            stage.setScene(new Scene(root1, 950, 700));
             stage.show();
             
         } catch (IOException e) {
