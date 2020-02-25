@@ -120,39 +120,30 @@ public class OneVsOne implements Initializable {
 
     public void setMark(int index) {
         myTurn = true;
-        if (index == 0) {
-            updateGUI(boards[0][0]);
 
-        } else if (index == 1) {
-            updateGUI(boards[1][0]);
+        int i = index % 3;
+        int j = index / 3;
 
-        } else if (index == 2) {
-            updateGUI(boards[2][0]);
+        updateGUI(boards[i][j]);
 
-        } else if (index == 3) {
-            updateGUI(boards[0][1]);
+         setTurnLabel();
+    }
 
-        } else if (index == 4) {
-            updateGUI(boards[1][1]);
+    public void closeGame() {
+        gameover = true;
+        System.out.println("game is paused from close");
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
 
-        } else if (index == 5) {
-            updateGUI(boards[2][1]);
+                whoseTURNLABEL.setText("Game is paused");
 
-        } else if (index == 6) {
-            updateGUI(boards[0][2]);
-
-        } else if (index == 7) {
-            updateGUI(boards[1][2]);
-
-        } else if (index == 8) {
-            updateGUI(boards[2][2]);
-
-        }
-        setTurnLabel();
-
+            }
+        });
     }
 
     public void recieveSocket(PrintWriter toServer, BufferedReader fromServer, String myMark) {
+        System.out.println("recieve socket " + myMark);
         this.toServer = toServer;
         this.myMark = myMark;
         if (myMark.equals("X")) {
@@ -197,8 +188,18 @@ public class OneVsOne implements Initializable {
     }
 
     public void pause(ActionEvent actionEvent) {
-        System.out.println("pause");
+        System.out.println("pause from pause");
+        gameover = true;
         toServer.println("pause");
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+
+                whoseTURNLABEL.setText("Game is paused");
+
+            }
+        });
+
     }
 
     private void sendMove(Button btnPressed, int index) {
@@ -259,20 +260,22 @@ public class OneVsOne implements Initializable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     static String invitedUserName;
-    static String invitedUserScore;
+    static Integer invitedUserScore;
 
     void recieveInvitedUserData(User invitedUser) {
         invitedUserName = invitedUser.userName;
-        invitedUserScore = String.valueOf(invitedUser.score);
+        invitedUserScore = invitedUser.score;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    void recieveInvitedUserData(String invitedUser, String invitedscore) {
-        invitedUserName = invitedUser;
-        invitedUserScore = invitedscore;
-
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+//    void recieveInvitedUserData(String invitedUser، Integer invitedscore) {
+//        invitedUserName = invitedUser;
+//       invitedUserScore=invitedscore;
+//
+//
+//
+//        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//    
 
     void resumeMatch(String gridFromServer, String playerTurn) {
         for (int i = 0; i < 3; i++) {
