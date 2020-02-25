@@ -265,8 +265,12 @@ public class OneVsOne implements Initializable {
         invitedUserScore = invitedUser.score;
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    void recieveInvitedUserData(String invitedUser) {
+    void recieveInvitedUserData(String invitedUser، Integer invitedscore) {
         invitedUserName = invitedUser;
+invitedUserScore=invitedscore;
+
+
+
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
