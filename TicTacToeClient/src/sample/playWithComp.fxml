@@ -152,26 +152,26 @@
             <Font name="A bite" size="33.0" />
          </font>
       </Label>
-      <Label fx:id="level" layoutX="150" layoutY="10" prefHeight="84.0" prefWidth="335.0" text="Please Chosse Level First: " textFill="#e3a600">
+      <Label fx:id="level" layoutX="200" layoutY="10" prefHeight="84.0" prefWidth="335.0" text="Chosse Level First: " textFill="#e3a600">
          <font>
             <Font name="A bite" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="188.0" layoutY="176.0" prefHeight="38.0" prefWidth="162.0" text="Your Score: " textFill="WHITE">
+<!--      <Label layoutX="188.0" layoutY="176.0" prefHeight="38.0" prefWidth="162.0" text="Your Score: " textFill="WHITE">
          <font>
             <Font name="4 Star Face Font" size="33.0" />
          </font>
-      </Label>
+      </Label>-->
       <Label fx:id="winLabel" layoutX="19.0" layoutY="524.0" prefHeight="64.0" prefWidth="264.0" text="" textFill="WHITE">
          <font>
             <Font name="4 Star Face Font" size="43.0" />
          </font>
       </Label>
-      <Label layoutX="335.0" layoutY="173.0" text="put score here" textFill="WHITE">
+<!--      <Label layoutX="335.0" layoutY="173.0" text="put score here" textFill="WHITE">
          <font>
             <Font name="4 Star Face Font" size="33.0" />
          </font>
-      </Label>
+      </Label>-->
       <Button fx:id="easyLevel" layoutX="585.0" layoutY="26.0" mnemonicParsing="false" onAction="#chooseEasyLevel" prefHeight="38.0" prefWidth="90.0" text="Easy Level" textFill="#1e0e0e">
          <font>
             <Font name="System Bold" size="13.0" />
