@@ -57,6 +57,7 @@ public class TicTacToeClient extends Application {
 
     Controller controller = loader.getController();
     ClientListner listner;
+
     public void init() {
 
     }
@@ -199,7 +200,7 @@ public class TicTacToeClient extends Application {
                         } else if (mssg.equals("loginFailed")) {
                             signActiontarget.setText("login Failed Please try again");
                             System.out.println("login Failed Please try again");
-                            
+
                         }
                     } else {
                         signActiontarget.setText("Please Connect First then login");
@@ -441,7 +442,7 @@ public class TicTacToeClient extends Application {
                                 ButtonType accept = new ButtonType("Accept");
                                 ButtonType reject = new ButtonType("Reject");
                                 alert.getButtonTypes().setAll(accept, reject);
-                                
+
                                 Optional<ButtonType> result = alert.showAndWait();
                                 if (result.get() == accept) {
                                     toServer.println("accept");
@@ -452,9 +453,9 @@ public class TicTacToeClient extends Application {
                                     toServer.println("refused");
                                 }
                             }
-                            
+
                             private void sendInvitedUserDatatoOneVsOnePage(String invitingPlayerUserName, String invitingPlayerScore) {
-                                new OneVsOne().recieveInvitedUserData(invitingPlayerUserName,invitingPlayerScore);
+//                                new OneVsOne().recieveInvitedUserData(invitingPlayerUserName,invitingPlayerScore);
                                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                             }
                         });
@@ -511,7 +512,13 @@ public class TicTacToeClient extends Application {
                         System.out.println("recieved f tictactoe");
                         new OneVsOne().chatAppend(mssg);//the function that append to chat}
 
-                    } else if (isNumeric(mssg)) {
+                    }
+                    else if(mssg.contains("paused")){
+                        System.out.println("The game is paused from tictactoe");
+                        new OneVsOne().closeGame();
+
+                    }
+                    else if (isNumeric(mssg)) {
                         System.out.println("movement received");
                         new OneVsOne().setMark(Integer.valueOf(mssg));
                     } else {
