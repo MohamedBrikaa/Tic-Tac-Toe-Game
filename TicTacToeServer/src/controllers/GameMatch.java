@@ -142,9 +142,11 @@ public class GameMatch {
         // if(cntr==8)playerNumber=8;
          
          playerTurn(playerNumber, move);
-         playerNumber++;
-         playerNumber %= 2;
-         cntr++;
+         if(!move.contains("chat")){
+           playerNumber++;
+           playerNumber %= 2;
+           cntr++;
+         }
      }
     
 
