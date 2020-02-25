@@ -57,7 +57,8 @@ public class OneVsOne implements Initializable {
     Button R2;
     @FXML
     Button R3;
-    @FXML TextField chatTextField;
+    @FXML
+    TextField chatTextField;
     static Stage primaryStage;
     static GridPane grid;
     static Scene scene;
@@ -161,7 +162,7 @@ public class OneVsOne implements Initializable {
             myTurn = false;
             this.opponentMark = "X";
         }
-        
+
     }
 
     public void solve() {
@@ -188,7 +189,7 @@ public class OneVsOne implements Initializable {
         name2.setText(invitedUserName);
         score2.setText(String.valueOf(invitedUserScore));
         setTurnLabel();
-        
+
     }
 
     public void setChat(String mssg) {
@@ -208,7 +209,7 @@ public class OneVsOne implements Initializable {
                 btnPressed.setText(myMark);
                 btnPressed.disableProperty();
                 toServer.println(index);
-                
+
             }
             setTurnLabel();
         }
@@ -227,20 +228,20 @@ public class OneVsOne implements Initializable {
     }
     static String user;
     static Integer score;
-    
-    void setTurnLabel(){
-        String text="Your Turn";
-        if(myTurn==false)text="Not your turn";
+
+    void setTurnLabel() {
+        String text = "Your Turn";
+        if (myTurn == false) {
+            text = "Not your turn";
+        }
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                if(myTurn==true){
+                if (myTurn == true) {
                     whoseTURNLABEL.setText("Your Turn");
+                } else {
+                    whoseTURNLABEL.setText("Not your Turn");
                 }
-                else{
-                     whoseTURNLABEL.setText("Not your Turn");
-                }
-                
 
             }
         });
@@ -258,22 +259,21 @@ public class OneVsOne implements Initializable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     static String invitedUserName;
-    static Integer invitedUserScore;
+    static String invitedUserScore;
 
     void recieveInvitedUserData(User invitedUser) {
         invitedUserName = invitedUser.userName;
-        invitedUserScore = String. valueOf(invitedUser.score) ;
+        invitedUserScore = String.valueOf(invitedUser.score);
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    void recieveInvitedUserData(String invitedUser، Integer invitedscore) {
+
+    void recieveInvitedUserData(String invitedUser, String invitedscore) {
         invitedUserName = invitedUser;
-invitedUserScore=invitedscore;
-
-
+        invitedUserScore = invitedscore;
 
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     void resumeMatch(String gridFromServer, String playerTurn) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -316,22 +316,22 @@ invitedUserScore=invitedscore;
         gameover = true;
     }
 
-    void chatAppend(String mssg)
-    {
-        mssg=mssg.substring(4);
-        mssg+='\n';
+    void chatAppend(String mssg) {
+        mssg = mssg.substring(4);
+        mssg += '\n';
         System.out.println("appending chat");
         System.out.println(chatAREA);
         chatAREA.appendText(mssg);
     }
+
     public void sendChat(ActionEvent actionEvent) {
-        
-        chatText= chatTextField.getText();
-        chatText="chat "+chatText;
+
+        chatText = chatTextField.getText();
+        chatText = "chat " + chatText;
         toServer.println(chatText);
-         chatTextField.setText("");
+        chatTextField.setText("");
         System.out.println("send chat to server" + chatText);
-      
+
     }
 
 }
