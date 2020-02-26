@@ -175,8 +175,8 @@ public class OneVsOne implements Initializable {
         boards[0][2] = R1;
         boards[1][2] = R2;
         boards[2][2] = R3;
-        name1.setText(user);
-        score1.setText(String.valueOf(score));
+        name1.setText(new Controller().user);
+        score1.setText(String.valueOf(new Controller().score));
         name2.setText(invitedUserName);
         score2.setText(String.valueOf(invitedUserScore));
         setTurnLabel();
@@ -260,21 +260,21 @@ public class OneVsOne implements Initializable {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     static String invitedUserName;
-    static Integer invitedUserScore;
+    static String  invitedUserScore;
 
     void recieveInvitedUserData(User invitedUser) {
         invitedUserName = invitedUser.userName;
-        invitedUserScore = invitedUser.score;
+        invitedUserScore = String.valueOf(invitedUser.score); 
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-//    void recieveInvitedUserData(String invitedUser، Integer invitedscore) {
-//        invitedUserName = invitedUser;
-//       invitedUserScore=invitedscore;
+    void recieveInvitedUserData(String invitedUser، String invitedScore) {
+        invitedUserName = invitedUser;
+       invitedUserScore=invitedScore;
 //
 //
 //
 //        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
+   }
 //    
 
     void resumeMatch(String gridFromServer, String playerTurn) {
