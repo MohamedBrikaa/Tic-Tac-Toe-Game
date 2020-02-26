@@ -455,7 +455,7 @@ public class TicTacToeClient extends Application {
                             }
 
                             private void sendInvitedUserDatatoOneVsOnePage(String invitingPlayerUserName, String invitingPlayerScore) {
-//                                new OneVsOne().recieveInvitedUserData(invitingPlayerUserName,invitingPlayerScore);
+                          new OneVsOne().recieveInvitedUserData(invitingPlayerUserName,invitingPlayerScore);
                                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                             }
                         });
