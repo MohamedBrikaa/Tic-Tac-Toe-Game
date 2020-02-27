@@ -1,21 +1,23 @@
 # Tic-Tac-Toe-Game
 Java Tic-Tac-Toe Game
 			
-
-			Tic-Tac-Toe Game
-
-		  =====================
-
-	Project scope:
+ 
+ Tic-Tac-Toe Game
+ ==================
+ 
+	 Project scope:
 	===============
 
 		- A learning project, as a part of Java Programming course evaluation,
 		- Done by ITI- Open source (IoT) students. Intake 40. 
-		- Contributers are listed at the end of this document.  
+		- Contributers are listed at the end of this document.
  
-  Project Video and Jar File: 
-  =============================
-     https://drive.google.com/drive/folders/181IHln35H-ApPmLy_Y4ySZKFoyKusez2
+	  
+	
+	 Project Video and Jar File: 
+	=============================
+     		https://drive.google.com/drive/folders/181IHln35H-ApPmLy_Y4ySZKFoyKusez2
+	
 	
 	A Tic-Tac-Toe Game with the following features: 
 	================================================
