@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -90,12 +91,47 @@ public class GameServerGUI extends Application {
         onBtn.setToggleGroup(toggleGroup);
         offBtn.setToggleGroup(toggleGroup);
         onBtn.setSelected(true);
-        FlowPane fPane = new FlowPane(onBtn, offBtn);
+        offBtn.setStyle("-fx-padding: 8 15 15 15;\n"
+                + "    -fx-background-insets: 0,0 0 5 0,0 0 6 0,0 0 7 0;\n"
+                + "    -fx-background-radius: 8;\n"
+                + "    -fx-background-color:\n"
+                + "            linear-gradient(from 0% 93% to 0% 100%,#a34313 0%,#903b12 100%),\n"
+                + "             #9d4024,\n"
+                + "             #d86e3a,\n"
+                + "            radial-gradient(center 50% 50%, radius 100%,#d96e3a,#c54e2c);\n"
+                + "    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75),4,0,0,1);\n"
+                + "    -fx-font-weight: bold;\n"
+                + "    -fx-font-size: 1.1em;\n"
+                + "    -fx-text-fill: white;");
+        onBtn.setStyle("-fx-padding: 8 15 15 15;\n"
+                + "    -fx-background-insets: 0,0 0 5 0,0 0 6 0,0 0 7 0;\n"
+                + "    -fx-background-radius: 8;\n"
+                + "    -fx-background-color:\n"
+                + "            linear-gradient(from 0% 93% to 0% 100%,#a34313 0%,#903b12 100%),\n"
+                + "             #9d4024,\n"
+                + "             #d86e3a,\n"
+                + "            radial-gradient(center 50% 50%, radius 100%,#d96e3a,#c54e2c);\n"
+                + "    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.75),4,0,0,1);\n"
+                + "    -fx-font-weight: bold;\n"
+                + "    -fx-font-size: 1.1em;\n"
+                + "    -fx-text-fill: white;");
+        
+         HBox leftBox = new HBox(onBtn);
+        leftBox.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(leftBox, Priority.ALWAYS);
+
+        HBox rightBox = new HBox(offBtn);
+        rightBox.setAlignment(Pos.CENTER_RIGHT);
+        HBox.setHgrow(rightBox, Priority.ALWAYS);
+        HBox bottom = new HBox(leftBox, rightBox);
+        bottom.setPadding(new Insets(10));
+        bottom.setStyle("fx-background-color:black");
         BorderPane root = new BorderPane(table);
-        //root.getChildren().add(fPane);
-        BorderPane.setAlignment(fPane, Pos.BOTTOM_CENTER);
-        root.setBottom(fPane);
+        root.setBottom(bottom);
+//        root.setStyle("-fx-background-image: url('https://games.lol/wp-content/uploads/2018/11/x-o-tic-tac-toe-pc-download.png')");
         Scene scene = new Scene(root, 300, 250);
+        scene.getStylesheets().add("views/serverCascadeStyleSheet.css");
+        scene.getStylesheets().add("views/styleSheet.css");
         primaryStage.setWidth(600);
         primaryStage.setHeight(500);
         primaryStage.setTitle("Game Server");
@@ -109,6 +145,7 @@ public class GameServerGUI extends Application {
             @Override
             public void handle(ActionEvent e) {
                 socketServerThread.stop();
+//                ClientHandler.closeAllInternalSockets();
                 System.out.println("close Server");
             }
         });

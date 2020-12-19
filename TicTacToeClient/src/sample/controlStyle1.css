@@ -1,0 +1,54 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Feb 21, 2020, 8:03:17 PM
+    Author     : Isaac.Wahba
+*/
+
+.button1{
+    -fx-text-fill: #006464;
+    -fx-background-color: #DFB951;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+
+.label
+{
+    -fx-font-family: "arial";
+    -fx-font-size: 16px;
+    -fx-font-style: italic;
+    -fx-font-weight: bolder;
+}
+
+
+.button{
+    -fx-text-fill: #006464;
+    -fx-background-color: #DFB951;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+
+
+#btnLogin {
+    -fx-background-radius: 30, 30, 29, 28;
+    -fx-padding: 3px 10px 3px 10px;
+    -fx-background-color:  #FF9A00;
+}
+
+#btnsignup {
+    -fx-background-radius: 30, 30, 29, 28;
+    -fx-padding: 3px 10px 3px 10px;
+    -fx-background-color:  #FF9A00;
+}
+
+
+.pane {
+    -fx-background-color: #00D2FF;
+}

@@ -8,11 +8,12 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="TicTacToeClient.jar" size="12794" download="eager" />
+    <jar href="TicTacToeClient.jar" size="3728454" download="eager" />
+    <jar href="lib\controlsfx-8.40.13.jar" size="1213306" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="TicTacToeClient" >
     <param name="requiredFXVersion" value="8.0+"/>
   </applet-desc>
-  <jfx:javafx-desc  width="800" height="600" main-class="tictactoeclient.LogIn"  name="TicTacToeClient" />
+  <jfx:javafx-desc  width="800" height="600" main-class="sample.TicTacToeClient"  name="TicTacToeClient" />
   <update check="always"/>
 </jnlp>

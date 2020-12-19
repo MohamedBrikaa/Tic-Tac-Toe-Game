@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="700.0" prefWidth="720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.GameController">
+   <children>
+      <ImageView fitHeight="700.0" fitWidth="720.0">
+         <image>
+            <Image url="@c0a31be891a8d873d18de0a0e44bf53a.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="76.0" layoutY="224.0" prefHeight="290.0" prefWidth="572.0" style="-fx-border-color: #d39762; -fx-border-width: 5;">
+         <children>
+            <Button fx:id="L1" layoutX="31.0" layoutY="28.0" mnemonicParsing="false" onAction="#setL1" prefHeight="80.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="C1" layoutX="201.0" layoutY="28.0" mnemonicParsing="false" onAction="#setC1" prefHeight="80.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="R1" layoutX="370.0" layoutY="28.0" mnemonicParsing="false" onAction="#setR1" prefHeight="80.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="L2" layoutX="30.0" layoutY="112.0" mnemonicParsing="false" onAction="#setL2" prefHeight="70.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="C2" layoutX="202.0" layoutY="112.0" mnemonicParsing="false" onAction="#setC2" prefHeight="70.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="R2" layoutX="371.0" layoutY="113.0" mnemonicParsing="false" onAction="#setR2" prefHeight="70.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="L3" layoutX="31.0" layoutY="188.0" mnemonicParsing="false" onAction="#setL3" prefHeight="70.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="C3" layoutX="202.0" layoutY="189.0" mnemonicParsing="false" onAction="#setC3" prefHeight="70.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+            <Button fx:id="R3" layoutX="370.0" layoutY="190.0" mnemonicParsing="false" onAction="#setR3" prefHeight="70.0" prefWidth="170.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 3;" textFill="#e40a0a">
+               <effect>
+                  <Lighting diffuseConstant="1.47" specularConstant="0.95" specularExponent="20.47">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                     <light>
+                        <Light.Distant />
+                     </light>
+                  </Lighting>
+               </effect>
+               <font>
+                  <Font name="Candara Bold" size="35.0" />
+               </font></Button>
+         </children>
+      </AnchorPane>
+      <Label layoutX="46.0" layoutY="52.0" prefHeight="84.0" prefWidth="335.0" text="Let's play!" textFill="#e3a600">
+         <font>
+            <Font name="A bite" size="33.0" />
+         </font>
+      </Label>
+      <Label fx:id="level" layoutX="200" layoutY="10" prefHeight="84.0" prefWidth="335.0" text="Chosse Level First: " textFill="#e3a600">
+         <font>
+            <Font name="A bite" size="24.0" />
+         </font>
+      </Label>
+<!--      <Label layoutX="188.0" layoutY="176.0" prefHeight="38.0" prefWidth="162.0" text="Your Score: " textFill="WHITE">
+         <font>
+            <Font name="4 Star Face Font" size="33.0" />
+         </font>
+      </Label>-->
+      <Label fx:id="winLabel" layoutX="19.0" layoutY="524.0" prefHeight="64.0" prefWidth="264.0" text="" textFill="WHITE">
+         <font>
+            <Font name="4 Star Face Font" size="43.0" />
+         </font>
+      </Label>
+<!--      <Label layoutX="335.0" layoutY="173.0" text="put score here" textFill="WHITE">
+         <font>
+            <Font name="4 Star Face Font" size="33.0" />
+         </font>
+      </Label>-->
+      <Button fx:id="easyLevel" layoutX="585.0" layoutY="26.0" mnemonicParsing="false" onAction="#chooseEasyLevel" prefHeight="38.0" prefWidth="90.0" text="Easy Level" textFill="#1e0e0e">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <effect>
+            <Lighting diffuseConstant="1.44" specularConstant="0.62" specularExponent="14.88" surfaceScale="2.43">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#fffb0f" />
+               </light>
+            </Lighting>
+         </effect>
+      </Button>
+      <Button fx:id="hardLevel" layoutX="586.0" layoutY="76.0" mnemonicParsing="false" onAction="#chooseHardLevel" prefHeight="38.0" prefWidth="90.0" text="Hard Level">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <effect>
+            <Lighting diffuseConstant="1.37" specularConstant="1.62" specularExponent="25.12" surfaceScale="2.2">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#fc0202" />
+               </light>
+            </Lighting>
+         </effect>
+      </Button>
+      <Button fx:id="reset" layoutX="596.0" layoutY="631.0" mnemonicParsing="false" onAction="#resetGame" prefHeight="38.0" prefWidth="90.0" style="-fx-background-color: yellow;" text="Reset">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+         <effect>
+            <Lighting diffuseConstant="1.37" specularConstant="0.09" specularExponent="40.0" surfaceScale="3.36">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant color="#ffe207" />
+               </light>
+            </Lighting>
+         </effect>
+      </Button>
+   </children>
+</AnchorPane>

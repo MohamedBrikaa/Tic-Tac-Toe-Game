@@ -1,17 +1,13 @@
 package controllers;
 
-import com.mysql.jdbc.Buffer;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import models.*;
 import views.*;
 
@@ -21,6 +17,7 @@ public class ClientHandler extends Thread {
     PrintWriter ps;
     Socket s;
     User user;
+    boolean serverOn;
     static Vector<User> playersList = new Vector<>();
     static Vector<String> onlinePlayersUNames = new Vector<>();
     static Vector<ClientHandler> onlinePlayers = new Vector<>();
@@ -36,6 +33,7 @@ public class ClientHandler extends Thread {
             this.s = s;
             dis = new BufferedReader(new InputStreamReader(s.getInputStream(), "UTF-8"));
             ps = new PrintWriter(s.getOutputStream(), true);
+            serverOn=true;
             System.out.println("new socket for player connected and new handler initated");
             start();
         } catch (IOException ex) {
@@ -47,7 +45,7 @@ public class ClientHandler extends Thread {
     public void run() {
         String mssg;
         int i = 0;
-        while (true) {
+        while (serverOn) {
             try {
                 System.out.println("waiting for new message");
                 mssg = dis.readLine();
@@ -70,17 +68,16 @@ public class ClientHandler extends Thread {
                 } else if (mssg.equals("logout")) {
 
                     System.out.println("request logout");
+                    sendUpdatetoAllClients("logout");
                     closePlayerConnection(this, "OFFLINE");
 
-                } else if (isNumeric(mssg)) {
-                    //send movement
+                } else if (isNumeric(mssg) || mssg.contains("chat") || mssg.equals("pause")) {                    //send movement
                     System.out.println("Play Movement");
-//                    gameMatches.get(gameIndex).sendNewMove(mssg);
-                } else if(mssg.equals("accept")||mssg.equals("refused")){
+                    gameMatches.get(gameIndex).sendNewMove(mssg);
+                } else if (mssg.equals("accept") || mssg.equals("refused")) {
                     //client accept or refuse invitation from another thread
                     invitationStatus.set(invitationIndex, mssg);
-                }
-                else {
+                } else {
                     System.out.println("unknown operation");
                     System.out.println(mssg);
                 }
@@ -115,11 +112,12 @@ public class ClientHandler extends Thread {
                 onlinePlayersUNames.add(userName);
 
                 ps.println("loginDone");
-                sendUserInfo(user);
+                sendUserInfo(this.ps, user);
                 //refresh players list and send the player list to the player
                 refreshPlayersList();
                 sendPlayersList();
                 GameServerGUI.updatePlayersTable();
+                sendUpdatetoAllClients("login");
             } else {
                 ps.println("loginFailed");
             }
@@ -127,6 +125,32 @@ public class ClientHandler extends Thread {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void sendUpdatetoAllClients(String updateState) {
+        for (ClientHandler player : onlinePlayers) {
+            if (player.user.userID != user.userID) {
+                player.ps.println("updateStatus");
+                player.ps.println(this.user.userName);
+                player.ps.println(updateState);
+                player.ps.println(playersList.size() - 1);
+                for (int i = 0; i < playersList.size(); i++) {
+                    if (playersList.get(i).userID != player.user.userID) {
+                        sendUserInfo(player.ps, playersList.get(i));
+                    }
+                }
+            }
+        }
+    }
+
+    public void sendPlayersList() {
+        ps.println(playersList.size() - 1);
+        for (int i = 0; i < playersList.size(); i++) {
+            if (playersList.get(i).userID != user.userID) {
+                System.out.println("send player " + playersList.get(i).userName);
+                sendUserInfo(this.ps, playersList.get(i));
+            }
+        }
     }
 
     public void signUP() {
@@ -138,8 +162,6 @@ public class ClientHandler extends Thread {
             user.state = "OFFLINE";
             refreshPlayersList();
             //refresh data in server GUI
-            GameServerGUI.updatePlayersTable();
-
             //send updates to clients and server
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,6 +169,7 @@ public class ClientHandler extends Thread {
         if (!(user.userName.isEmpty() && user.email.isEmpty() && user.password.isEmpty())) {
             if (UserModel.addPlayer(user)) {
                 ps.println("signupDone");
+                GameServerGUI.updatePlayersTable();
             } else {
                 ps.println("signupFailed");
             }
@@ -160,13 +183,14 @@ public class ClientHandler extends Thread {
         ClientHandler invitedClient = onlinePlayers.get(onlinePlayersUNames.indexOf(userName));
         invitedClient.ps.println("invitation");
         invitedClient.ps.println(this.user.userName);
+        invitedClient.ps.println(this.user.score);
 
         try {
             this.sleep(500);
         } catch (InterruptedException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         invitationStatus.add(new String("waiting"));
         this.invitationIndex = invitationStatus.size() - 1;
         invitedClient.invitationIndex = invitationStatus.size() - 1;
@@ -177,7 +201,12 @@ public class ClientHandler extends Thread {
         if (invitatonReply.equals("accept")) {
             //recive accept
             this.ps.println("invitationAccepted");
-//            gameMatches.add(new GameMatch(this.user.userName, userName, this.s, invitedClient.s));
+            try {
+                this.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            gameMatches.add(new GameMatch(this.user.userName, userName, this.s, invitedClient.s));
             this.gameIndex = gameMatches.size() - 1;
             invitedClient.gameIndex = gameMatches.size() - 1;
 
@@ -191,7 +220,7 @@ public class ClientHandler extends Thread {
         return UserModel.playerInfo(userName);
     }
 
-    public void sendUserInfo(User user) {
+    public void sendUserInfo(PrintWriter ps, User user) {
         ps.println(user.userID);
         ps.println(user.userName);
         ps.println(user.email);
@@ -203,18 +232,10 @@ public class ClientHandler extends Thread {
         playersList = UserModel.returnAllPlayers();
     }
 
-    public void sendPlayersList() {
-        ps.println(playersList.size() - 1);
-        for (int i = 0; i < playersList.size(); i++) {
-            if (playersList.get(i).userID != user.userID) {
-                sendUserInfo(playersList.get(i));
-            }
-        }
-    }
-
     public static void closeAllInternalSockets() {
         for (ClientHandler player : onlinePlayers) {
             player.ps.println("serveroff");
+            player.serverOn=false;
             closePlayerConnection(player, "OFFLINE");
             try {
                 player.s.close();
@@ -227,16 +248,16 @@ public class ClientHandler extends Thread {
     private static void closePlayerConnection(ClientHandler handler, String state) {
         try {
             System.out.println(handler.user.userName);
-            System.out.println(state);
             UserModel.updatePlayerState(handler.user.userName, state);
             handler.dis.close();
             handler.ps.close();
+            GameServerGUI.updatePlayersTable();
             handler.stop();
 
             onlinePlayers.remove(handler);
             onlinePlayersUNames.remove(handler.user.userName);
             playersList.remove(handler);
-            GameServerGUI.updatePlayersTable();
+
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }

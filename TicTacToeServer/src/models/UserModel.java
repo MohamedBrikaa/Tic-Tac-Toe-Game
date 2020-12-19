@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 /** @author nourfayed */
 
 public class UserModel {
-  static final String DB_URL = "jdbc:mysql://localhost:3306/phpmyadmin";
+  static final String DB_URL = "jdbc:mysql://localhost:3306/tic-tac-toe";
    static final String DB_DRV = "com.mysql.jdbc.Driver";
    static final String DB_USER = "root";
    static final String DB_PASSWD = "";
@@ -50,7 +50,7 @@ public class UserModel {
        try {
            Connection connection = connect();
            Statement statement = (Statement) connection.createStatement();
-           ResultSet resultSet=statement.executeQuery("SELECT * FROM users");
+           ResultSet resultSet=statement.executeQuery("SELECT * FROM users order by Points DESC");
            boolean playerNameFound=false,correctPassword=false;
            while(resultSet.next()){
                

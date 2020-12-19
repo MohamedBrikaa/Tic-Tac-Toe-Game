@@ -1,5 +1,5 @@
 
-package recordmatch;
+package controllers;
 
 /*
  * @author nourfayed
